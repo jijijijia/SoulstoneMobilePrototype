@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83249c743db259b458c16b75e3121e51, type: 3}
+  m_Name: Skill_ChainLightning
+  m_EditorClassIdentifier: Assembly-CSharp::SkillData
+  skillId: chain_lightning
+  displayName: Chain Lightning
+  description: Strike an enemy with lightning that jumps between nearby targets.
+  icon: {fileID: 0}
+  hitType: 9
+  element: 3
+  runtimeDefinition: {fileID: 11400000, guid: bd5b59beba328774fbbe63a31bc6a160, type: 2}
+  globalSkill: 0
+  maxRank: 5
+  visualPrefab: {fileID: 0}
+  tags:
+  - Lightning
+  - Chain
+  - Magical
+  appliedStatuses: []
+  configurableAttacks: []
+  attackDefinitions:
+  - {fileID: 11400000, guid: db8dd6a7f317455889a894832eb48409, type: 2}
+  parameters: []

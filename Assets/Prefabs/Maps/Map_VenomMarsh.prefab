@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &100000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 400000}
+  - component: {fileID: 11400000}
+  m_Layer: 0
+  m_Name: Map_VenomMarsh
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &400000
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93c9e38fd0b9473db5e095ae0bb87920, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MapRuntimeBuilder
+  mapSize: {x: 40, y: 44}
+  groundHeight: 0.2
+  groundColor: {r: 0.27, g: 0.36, b: 0.29, a: 1}
+  obstacleColor: {r: 0.25, g: 0.31, b: 0.24, a: 1}
+  clearLegacySceneMapObjects: 1
+  obstacles:
+  - name: Marsh_Root_A
+    position: {x: -5, y: 1, z: 5}
+    scale: {x: 7, y: 2, z: 1.4}
+    color: {r: 0.22, g: 0.25, b: 0.18, a: 1}
+  - name: Marsh_Root_B
+    position: {x: 6, y: 1, z: -3}
+    scale: {x: 1.4, y: 2, z: 7}
+    color: {r: 0.2, g: 0.25, b: 0.17, a: 1}
+  - name: Toxic_Rock
+    position: {x: -9, y: 1.4, z: -7}
+    scale: {x: 3.2, y: 2.8, z: 2.8}
+    color: {r: 0.32, g: 0.42, b: 0.24, a: 1}
+  - name: Sinking_Stone
+    position: {x: 9, y: 0.9, z: 8}
+    scale: {x: 4, y: 1.8, z: 3}
+    color: {r: 0.24, g: 0.3, b: 0.26, a: 1}

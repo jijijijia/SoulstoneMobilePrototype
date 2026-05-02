@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b9f5c75cf4e4d2b947394c5c92a7a64, type: 3}
+  m_Name: Map_BoneCitadel
+  m_EditorClassIdentifier: Assembly-CSharp::MapData
+  mapId: bone_citadel
+  displayName: "\u041A\u043E\u0441\u0442\u044F\u043D\u0430\u044F \u0446\u0438\u0442\u0430\u0434\u0435\u043B\u044C"
+  difficulty: "\u041E\u0447\u0435\u043D\u044C \u0432\u044B\u0441\u043E\u043A\u0430\u044F"
+  biome: "\u041D\u0435\u043A\u0440\u043E\u043F\u043E\u043B\u044C"
+  enemyDescription: "\u0422\u043E\u043B\u043F\u044B, \u044D\u043B\u0438\u0442\u044B, \u0441\u0442\u0440\u0435\u043B\u043A\u0438, \u0442\u0430\u043D\u043A\u0438 \u0438 \u0443\u0441\u0438\u043B\u0435\u043D\u043D\u044B\u0435 \u043C\u0438\u043D\u0438-\u0431\u043E\u0441\u0441\u044B."
+  rewardsDescription: "\u042D\u043F\u0438\u0447\u0435\u0441\u043A\u0438\u0435 \u043D\u0430\u0433\u0440\u0430\u0434\u044B, \u0440\u0435\u0434\u043A\u0438\u0435 \u0440\u0435\u0441\u0443\u0440\u0441\u044B."
+  mapPrefab: {fileID: 100000, guid: 3bb3400f08954f91b4d0a2ad1da68c78, type: 3}
+  spawnTimeline: {fileID: 11400000, guid: 87593cc0bd054c0d9e3ef8ac5b12c6dd, type: 2}
+  enemyPool:
+  - {fileID: 11400000, guid: eb3451b142190f948a974a32ff0232f4, type: 2}
+  - {fileID: 11400000, guid: c240558caf409854da37c3550c24c629, type: 2}
+  - {fileID: 11400000, guid: b04a76f01ef2e28448bf8a6252c0f9da, type: 2}
+  - {fileID: 11400000, guid: 97ee09d79f8c4a4f96bba8ce59341379, type: 2}
+  - {fileID: 11400000, guid: 6b2e0fd3a4c14eb2a7d4f8c9513b6a20, type: 2}
+  - {fileID: 11400000, guid: 2b75432f971f4ac8b6bde9d5b8e7e321, type: 2}
+  - {fileID: 11400000, guid: a80c0a1fbddb4938a4f505fcd2ea7fa5, type: 2}
+  enemyHealthMultiplier: 1.35
+  enemyDamageMultiplier: 1.3
+  spawnRateMultiplier: 1.25
+  packSizeBonus: 2
+  maxAliveBonus: 12
+  overrideMapBounds: 1
+  mapMin: {x: -20, y: -20}
+  mapMax: {x: 20, y: 20}

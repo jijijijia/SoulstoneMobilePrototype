@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 669869054ad464343bec8554929ba598, type: 3}
+  m_Name: Attack_RuneQuake
+  m_EditorClassIdentifier: Assembly-CSharp::AttackDefinition
+  attackId: rune_quake
+  displayName: "\u0420\u0443\u043D\u043D\u044B\u0439 \u0440\u0430\u0441\u043A\u043E\u043B"
+  baseCooldown: 1.35
+  cooldownReductionPerRank: 0
+  targeting: {fileID: 11400000, guid: 35329ae74c1a3f74cae34997c65a9873, type: 2}
+  delivery: {fileID: 11400000, guid: 32a9f1e770f01c240be961580affc80a, type: 2}
+  impacts:
+  - {fileID: 11400000, guid: eedef94309f677341a2308e8148b653d, type: 2}

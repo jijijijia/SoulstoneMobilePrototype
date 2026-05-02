@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83249c743db259b458c16b75e3121e51, type: 3}
+  m_Name: Skill_OrbitingBlades
+  m_EditorClassIdentifier: Assembly-CSharp::SkillData
+  skillId: orbiting_blades
+  displayName: Orbiting Blades
+  description: Summon rotating blades around the hero
+  icon: {fileID: 0}
+  runtimeDefinition: {fileID: 11400000, guid: b06a4a7c112d4c6cbad8a07f1d7cb467, type: 2}
+  globalSkill: 0
+  maxRank: 5
+  visualPrefab: {fileID: 0}
+  tags:
+  - Physical
+  - Area
+  - Swing
+  appliedStatuses:
+  - effectType: 2
+    duration: 3
+    potency: 4
+    maxStacks: 2
+    tickInterval: 1
+    refreshDuration: 1
+  parameters:
+  - key: orbitRadius
+    value: 2
+  - key: orbitSpeed
+    value: 180
+  - key: 'bladeScale '
+    value: 0.45
+  - key: 'bladeHeight '
+    value: 0.8
+  - key: 'hitCooldown '
+    value: 0.35
+  - key: bladeCount
+    value: 1
+  - key: 'damage '
+    value: 18

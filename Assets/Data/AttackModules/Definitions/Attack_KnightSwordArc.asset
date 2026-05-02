@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 669869054ad464343bec8554929ba598, type: 3}
+  m_Name: Attack_KnightSwordArc
+  m_EditorClassIdentifier: Assembly-CSharp::AttackDefinition
+  attackId: knight_sword_arc
+  displayName: "\u0420\u044B\u0446\u0430\u0440\u0441\u043A\u0438\u0439 \u0440\u0430\u0437\u043C\u0430\u0445"
+  baseCooldown: 0.68
+  cooldownReductionPerRank: 0
+  targeting: {fileID: 11400000, guid: 1032cbcb507706e41ac0a6efe7790902, type: 2}
+  delivery: {fileID: 11400000, guid: 6d584bfb84da5b54da6a24c5ab7ca5e8, type: 2}
+  impacts:
+  - {fileID: 11400000, guid: 10ed017011673ec45a3e6ab224170839, type: 2}

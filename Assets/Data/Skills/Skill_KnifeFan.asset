@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83249c743db259b458c16b75e3121e51, type: 3}
+  m_Name: Skill_KnifeFan
+  m_EditorClassIdentifier: Assembly-CSharp::SkillData
+  skillId: knife_fan
+  displayName: Knife Fan
+  description: Throw a fan of blades toward the nearest enemies.
+  icon: {fileID: 0}
+  hitType: 0
+  element: 0
+  runtimeDefinition: {fileID: 11400000, guid: bd5b59beba328774fbbe63a31bc6a160, type: 2}
+  globalSkill: 0
+  maxRank: 5
+  visualPrefab: {fileID: 0}
+  tags:
+  - Projectile
+  - Blade
+  - Spread
+  appliedStatuses: []
+  configurableAttacks: []
+  attackDefinitions:
+  - {fileID: 11400000, guid: 69353c7da0a44b90ba646c97771a2ffc, type: 2}
+  parameters: []

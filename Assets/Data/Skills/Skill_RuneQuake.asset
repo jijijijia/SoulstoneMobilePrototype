@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83249c743db259b458c16b75e3121e51, type: 3}
+  m_Name: Skill_RuneQuake
+  m_EditorClassIdentifier: Assembly-CSharp::SkillData
+  skillId: rune_quake
+  displayName: "\u0420\u0443\u043D\u043D\u044B\u0439 \u0440\u0430\u0441\u043A\u043E\u043B"
+  description: "\u0420\u0443\u043D\u043D\u044B\u0439 \u043A\u0443\u0437\u043D\u0435\u0446
+    \u0440\u0430\u0437\u0431\u0438\u0432\u0430\u0435\u0442 \u0437\u0435\u043C\u043B\u044E
+    \u0443\u0434\u0430\u0440\u043E\u043C \u043C\u043E\u043B\u043E\u0442\u0430."
+  icon: {fileID: 0}
+  hitType: 1
+  element: 5
+  runtimeDefinition: {fileID: 11400000, guid: bd5b59beba328774fbbe63a31bc6a160, type: 2}
+  visualPrefab: {fileID: 0}
+  baseDamage: 38
+  flatDamageBonus: 0
+  critChance: 0.04
+  critMultiplier: 2
+  areaBonus: 0.25
+  cooldown: 1.35
+  cooldownCoefficient: 1
+  cooldownDivider: 1
+  areaMultiplier: 1.1
+  repeatChance: 0
+  globalSkill: 0
+  maxRank: 1
+  tags:
+  - Area
+  - Earth
+  - Arcane
+  - Hammer
+  appliedStatuses: []
+  configurableAttacks: []
+  attackDefinitions:
+  - {fileID: 11400000, guid: aefb3f9b9e689ff40bb90c110e80cfa4, type: 2}
+  parameters: []

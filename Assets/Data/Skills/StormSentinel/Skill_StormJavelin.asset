@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83249c743db259b458c16b75e3121e51, type: 3}
+  m_Name: Skill_StormJavelin
+  m_EditorClassIdentifier: Assembly-CSharp::SkillData
+  skillId: storm_javelin
+  displayName: Storm Javelin
+  description: Launch charged javelins that spear the closest enemies.
+  icon: {fileID: 0}
+  runtimeDefinition: {fileID: 11400000, guid: ea6b29abffe7415ba1975b85c0991c92, type: 2}
+  globalSkill: 0
+  maxRank: 5
+  visualPrefab: {fileID: 0}
+  tags:
+  - Projectile
+  - Lightning
+  - Magic
+  appliedStatuses: []
+  configurableAttacks:
+  - attackId: storm_javelin_cast
+    baseCooldown: 0.68
+    cooldownReductionPerRank: 0.04
+    targetingMode: 0
+    targetCount: 2
+    maxDistance: 14
+    deliveryMode: 0
+    projectileSpeed: 16
+    projectileLifetime: 2.6
+    spawnHeight: 0.85
+    areaRadius: 3
+    areaVisualLifetime: 0.2
+    baseDamage: 16
+    damagePerRank: 5
+    ownerDamageMultiplier: 1.15
+  attackDefinitions: []
+  parameters: []

@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecbdf15869fdefc4eabe6907ff666c81, type: 3}
+  m_Name: Upgrade_StormJavelinFocus
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
+  upgradeId: storm_javelin_focus
+  displayName: Storm Javelin Focus
+  description: Boost Storm Javelin attack power and critical chance.
+  icon: {fileID: 0}
+  scope: 1
+  repeatable: 1
+  targetSkill: {fileID: 11400000, guid: ac6576261dff4afe9c7d6b403a4700a8, type: 2}
+  targetTags: []
+  statModifiers:
+  - statType: 14
+    additive: 0.2
+    multiplier: 0
+  - statType: 3
+    additive: 0.04
+    multiplier: 0
+  tagStatModifiers: []

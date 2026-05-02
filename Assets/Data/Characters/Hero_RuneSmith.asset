@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2410634079e5cbb4e9933c437a6c966c, type: 3}
+  m_Name: Hero_RuneSmith
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterData
+  characterId: rune_smith
+  displayName: "\u0420\u0443\u043D\u043D\u044B\u0439 \u043A\u0443\u0437\u043D\u0435\u0446"
+  modelPrefab: {fileID: 0}
+  baseStats:
+  - statType: 0
+    value: 135
+  - statType: 1
+    value: 5.5
+  - statType: 7
+    value: 2.7
+  - statType: 18
+    value: 16
+  - statType: 19
+    value: 0.04
+  - statType: 20
+    value: 1
+  - statType: 21
+    value: 2
+  - statType: 22
+    value: 0.006
+  - statType: 23
+    value: 0
+  startingWeapon: {fileID: 11400000, guid: 28adaa007bce418429d039856ddd8952, type: 2}
+  availableWeapons:
+  - {fileID: 11400000, guid: 28adaa007bce418429d039856ddd8952, type: 2}
+  globalUpgradePool:
+  - {fileID: 11400000, guid: 0102f5617e9df374688e15b4afbc8b4e, type: 2}
+  - {fileID: 11400000, guid: e3ad1d6214e02924b98f94e956312826, type: 2}
+  - {fileID: 11400000, guid: 4ae58365f9cb4ba4f89d2e47569e4b71, type: 2}
+  - {fileID: 11400000, guid: 932f7cca3bb92dc4f82bfeabff8c19f4, type: 2}
+  - {fileID: 11400000, guid: ef461131015e1a54082d30d254339691, type: 2}
+  - {fileID: 11400000, guid: c60916d84bc1a544c8b598509cf4efcb, type: 2}
+  - {fileID: 11400000, guid: 6a8aa86d7fdfbcb438228bbbe200241a, type: 2}
+  - {fileID: 11400000, guid: df555676330fcb640a91967596ff711c, type: 2}
+  - {fileID: 11400000, guid: 927ad2132644b184b85b44f87e8a8b31, type: 2}
+  - {fileID: 11400000, guid: 68da39a34fbba8349b350d0d2cbd52be, type: 2}
+  - {fileID: 11400000, guid: 528577d74b407b146bec561d763bdc7b, type: 2}
+  - {fileID: 11400000, guid: 43beab15c2e754b43a5c5089e7cfb5b7, type: 2}
+  - {fileID: 11400000, guid: cdbfdaa175d506d42bcae24585dc97f7, type: 2}
+  - {fileID: 11400000, guid: 8d44816ccc95bc34b89aebd8418c61ec, type: 2}

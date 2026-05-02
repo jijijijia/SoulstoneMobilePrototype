@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83249c743db259b458c16b75e3121e51, type: 3}
+  m_Name: Skill_Projectile
+  m_EditorClassIdentifier: Assembly-CSharp::SkillData
+  skillId: projectile
+  displayName: Projectile
+  description: Fire homing bolts at nearby enemies
+  icon: {fileID: 0}
+  runtimeDefinition: {fileID: 11400000, guid: 2c4dc4e92f564d24a9c2e151c947e5a1, type: 2}
+  globalSkill: 0
+  maxRank: 5
+  visualPrefab: {fileID: 0}
+  tags:
+  - Projectile
+  - Magic
+  parameters:
+  - key: interval
+    value: 0.6
+  - key: range
+    value: 12
+  - key: 'projectileSpeed '
+    value: 12
+  - key: projectileLifetime
+    value: 2.5
+  - key: damage
+    value: 25

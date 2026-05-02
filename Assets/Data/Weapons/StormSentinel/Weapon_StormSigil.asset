@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92b60a4ae001aa1489f1eb87d0dc1124, type: 3}
+  m_Name: Weapon_StormSigil
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponData
+  weaponId: stormsentinel_weapon
+  displayName: Storm Sigil
+  icon: {fileID: 0}
+  startingSkill: {fileID: 11400000, guid: ac6576261dff4afe9c7d6b403a4700a8, type: 2}
+  uniqueSkillPool:
+  - {fileID: 11400000, guid: ac6576261dff4afe9c7d6b403a4700a8, type: 2}
+  - {fileID: 11400000, guid: e5f599f8969d281459394863c28f80da, type: 2}
+  - {fileID: 11400000, guid: 78a9d745d98440b9befbc0476a71d5a7, type: 2}
+  - {fileID: 11400000, guid: 97491b0e9cc742b09e6ce7780b692d77, type: 2}
+  - {fileID: 11400000, guid: d92be85d176241599e296a465014baea, type: 2}
+  - {fileID: 11400000, guid: 540f2fb5e0884e22a6d7e6993c4818ef, type: 2}
+  weaponStatModifiers: []

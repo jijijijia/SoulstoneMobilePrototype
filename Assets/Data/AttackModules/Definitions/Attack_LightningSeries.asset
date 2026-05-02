@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 669869054ad464343bec8554929ba598, type: 3}
+  m_Name: Attack_LightningSeries
+  m_EditorClassIdentifier: Assembly-CSharp::AttackDefinition
+  attackId: lightning_series
+  displayName: "\u0421\u0435\u0440\u0438\u044F \u043C\u043E\u043B\u043D\u0438\u0439"
+  baseCooldown: 1.55
+  cooldownReductionPerRank: 0
+  targeting: {fileID: 11400000, guid: 1032cbcb507706e41ac0a6efe7790902, type: 2}
+  delivery: {fileID: 11400000, guid: b7ca697be1e4d0a43a1893e872fd52b4, type: 2}
+  impacts:
+  - {fileID: 11400000, guid: 33708498151c4ab4eb63277762d3f607, type: 2}

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 669869054ad464343bec8554929ba598, type: 3}
+  m_Name: Attack_VikingWhirl
+  m_EditorClassIdentifier: Assembly-CSharp::AttackDefinition
+  attackId: viking_whirl
+  displayName: "\u0412\u0438\u0445\u0440\u044C \u0441\u0435\u043A\u0438\u0440\u044B"
+  baseCooldown: 0.45
+  cooldownReductionPerRank: 0
+  targeting: {fileID: 11400000, guid: 35329ae74c1a3f74cae34997c65a9873, type: 2}
+  delivery: {fileID: 11400000, guid: c365de61038b29f40ae9f3a8c47d73c3, type: 2}
+  impacts:
+  - {fileID: 11400000, guid: 7ced4c33eaf44c148830a26c9eeefd2e, type: 2}

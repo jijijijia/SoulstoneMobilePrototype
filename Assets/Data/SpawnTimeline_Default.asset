@@ -1,0 +1,183 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9db7bcb1ac7048dc9f5a9f44db0f4bb5, type: 3}
+  m_Name: SpawnTimeline_Default
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnTimelineData
+  runDuration: 600
+  spawnDistance: 18
+  playerDirectionBias: 0.45
+  lateralJitter: 0.35
+  spawnRateKeyframes:
+  - t: 0
+    value: 0.9
+  - t: 0.2
+    value: 1.5
+  - t: 0.45
+    value: 2.25
+  - t: 0.7
+    value: 3.1
+  - t: 1
+    value: 4
+  packSizeKeyframes:
+  - t: 0
+    value: 2
+  - t: 0.25
+    value: 3
+  - t: 0.55
+    value: 5
+  - t: 0.8
+    value: 7
+  - t: 1
+    value: 8
+  maxAliveKeyframes:
+  - t: 0
+    value: 40
+  - t: 0.3
+    value: 70
+  - t: 0.6
+    value: 110
+  - t: 1
+    value: 150
+  healthMultiplierKeyframes:
+  - t: 0
+    value: 1
+  - t: 0.35
+    value: 1.2
+  - t: 0.65
+    value: 1.55
+  - t: 1
+    value: 2.1
+  damageMultiplierKeyframes:
+  - t: 0
+    value: 1
+  - t: 0.35
+    value: 1.12
+  - t: 0.65
+    value: 1.3
+  - t: 1
+    value: 1.65
+  enemyWeightTracks:
+  - enemy: {fileID: 11400000, guid: eb3451b142190f948a974a32ff0232f4, type: 2}
+    keyframes:
+    - t: 0
+      value: 1
+    - t: 0.35
+      value: 0.85
+    - t: 0.65
+      value: 0.55
+    - t: 1
+      value: 0.3
+  - enemy: {fileID: 11400000, guid: c240558caf409854da37c3550c24c629, type: 2}
+    keyframes:
+    - t: 0
+      value: 0
+    - t: 0.15
+      value: 0.2
+    - t: 0.4
+      value: 0.7
+    - t: 0.75
+      value: 0.95
+    - t: 1
+      value: 0.65
+  - enemy: {fileID: 11400000, guid: 97ee09d79f8c4a4f96bba8ce59341379, type: 2}
+    keyframes:
+    - t: 0
+      value: 0
+    - t: 0.18
+      value: 0.15
+    - t: 0.45
+      value: 0.55
+    - t: 0.75
+      value: 0.85
+    - t: 1
+      value: 0.7
+  - enemy: {fileID: 11400000, guid: 6b2e0fd3a4c14eb2a7d4f8c9513b6a20, type: 2}
+    keyframes:
+    - t: 0
+      value: 0
+    - t: 0.22
+      value: 0.18
+    - t: 0.5
+      value: 0.52
+    - t: 0.78
+      value: 0.8
+    - t: 1
+      value: 0.72
+  - enemy: {fileID: 11400000, guid: b04a76f01ef2e28448bf8a6252c0f9da, type: 2}
+    keyframes:
+    - t: 0
+      value: 0
+    - t: 0.4
+      value: 0.08
+    - t: 0.65
+      value: 0.4
+    - t: 1
+      value: 0.8
+  - enemy: {fileID: 11400000, guid: 2b75432f971f4ac8b6bde9d5b8e7e321, type: 2}
+    keyframes:
+    - t: 0
+      value: 0
+    - t: 0.45
+      value: 0.04
+    - t: 0.7
+      value: 0.18
+    - t: 1
+      value: 0.28
+  burstEvents:
+  - eventId: first_tank_wave
+    t: 0.5
+    enemy: {fileID: 11400000, guid: b04a76f01ef2e28448bf8a6252c0f9da, type: 2}
+    count: 2
+    healthMultiplier: 1.15
+    damageMultiplier: 1
+  - eventId: spitter_screen
+    t: 0.33
+    enemy: {fileID: 11400000, guid: 97ee09d79f8c4a4f96bba8ce59341379, type: 2}
+    count: 5
+    healthMultiplier: 1
+    damageMultiplier: 1
+  - eventId: frost_shaman_screen
+    t: 0.42
+    enemy: {fileID: 11400000, guid: 6b2e0fd3a4c14eb2a7d4f8c9513b6a20, type: 2}
+    count: 4
+    healthMultiplier: 1.05
+    damageMultiplier: 1
+  - eventId: first_elite
+    t: 0.62
+    enemy: {fileID: 11400000, guid: 2b75432f971f4ac8b6bde9d5b8e7e321, type: 2}
+    count: 1
+    healthMultiplier: 1
+    damageMultiplier: 1
+  - eventId: tank_pressure_spike
+    t: 0.8
+    enemy: {fileID: 11400000, guid: b04a76f01ef2e28448bf8a6252c0f9da, type: 2}
+    count: 3
+    healthMultiplier: 1.25
+    damageMultiplier: 1.1
+  - eventId: elite_pressure_spike
+    t: 0.9
+    enemy: {fileID: 11400000, guid: 2b75432f971f4ac8b6bde9d5b8e7e321, type: 2}
+    count: 2
+    healthMultiplier: 1.1
+    damageMultiplier: 1.05
+  - eventId: spitter_late_pressure
+    t: 0.78
+    enemy: {fileID: 11400000, guid: 97ee09d79f8c4a4f96bba8ce59341379, type: 2}
+    count: 8
+    healthMultiplier: 1.1
+    damageMultiplier: 1.15
+  - eventId: frost_crossfire
+    t: 0.84
+    enemy: {fileID: 11400000, guid: 6b2e0fd3a4c14eb2a7d4f8c9513b6a20, type: 2}
+    count: 6
+    healthMultiplier: 1.1
+    damageMultiplier: 1.1
