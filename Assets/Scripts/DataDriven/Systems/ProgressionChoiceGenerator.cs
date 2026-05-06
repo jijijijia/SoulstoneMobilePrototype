@@ -222,11 +222,11 @@ public class ProgressionChoiceGenerator
     {
         return rarity switch
         {
-            UpgradeRarity.Common => 60f,
-            UpgradeRarity.Uncommon => 25f,
-            UpgradeRarity.Rare => 10f,
-            UpgradeRarity.Epic => 4f,
-            UpgradeRarity.Legendary => 1f,
+            UpgradeRarity.Common => 60f * SkillTreeSystem.GetRarityWeightMultiplier(rarity),
+            UpgradeRarity.Uncommon => 25f * SkillTreeSystem.GetRarityWeightMultiplier(rarity),
+            UpgradeRarity.Rare => 10f * SkillTreeSystem.GetRarityWeightMultiplier(rarity),
+            UpgradeRarity.Epic => 4f * SkillTreeSystem.GetRarityWeightMultiplier(rarity),
+            UpgradeRarity.Legendary => 1f * SkillTreeSystem.GetRarityWeightMultiplier(rarity),
             _ => 1f
         };
     }

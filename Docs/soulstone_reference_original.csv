@@ -1,0 +1,48 @@
+﻿,Primary Types,Arcane,Blast,Bomb,Chaos,Earth,Electric,Fire,Holy,Ice,Nature,Projectile,Shadow,Slam,Swing,Thrust,,,,,,,,,,
+,Character,Arcane Weaver,Houndmaster,Assassin,Chaoswalker,Monkey King,Elementalist,Pyromancer,Paladin,Death Knight,Beastmaster,Sentinel,Necromancer,Barbarian,Spellblade,Legionnaire,Engineer,Myrmidon,Demon Hunter,Cursed Captain,Shaman,Machinist,Samurai,Blacksmith,,
+,Extra Types,Aura,Chain,Summon,Area,Burst,Empowering,Frontal,Lasting,Missile,Static,Secret,Magical,Physical,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,Some titan powers depend on distance to enemies,,,,,,,,
+,Bleed X (Y),"Y stacks of Bleed, X/10 per tick over 10s",,,,,Fragility X,Increase damage taken by X * 1%,,,,,Finesse X,Multicast + X * 1%,,Bulwark 1,,,,,,,,,,
+,Burn X (Y),"Y stacks of Burn, X/8 per tick over 4s",,,,,Weakness X,Increase dot and doom damage taken by X * 1.2%,,,,,Bulwark X,Block + X,,Aptitude 1,,,,,,,,,,
+,Poison X (Y),"Y stacks of Poison, X/15 per tick over 15s, spread on death",,,,,Shattered X,Decrease armor by X * 1,,,,,Aptitude X,Crit damage + X * 2%,,Prowess 1,,,,,,,,,,
+,Doom X (Y),"Y stacks of Doom, X damage, X/4 aoe damage on death/proc",,,,,Disoriented X,Increase crit damage taken by X * 1%,,,,,Prowess X,Damage + X * 1%,,Resilience 1,,,,,,,,,,
+,Slow X,Decrease movement speed by X * 1%,,,,,Disarray X,Increase damage taken by X * Random(-0.5%~2.5%),,,,,Resilience X,Armor + X,,Form 1,,,,,,,,,,
+,Dazed X,Increase crit chance by X * 1%,,,,,Distracted X,Increase miss chance by X * 0.5%,,,,,Form X,Crit chance + X * 1%,,Haste 1,,,,,,,,,,
+,Brittle X,Increase base damage by X * 1,,,,,Debilitated X,Decrease damage by X * 1%,,,,,Haste X,Movement + X * 1%,,Finesse 1,,,,,,,,,,
+,Exposed X,Increase base damage by up to X * 4%,,,,,Crippled X,Decrease area by X * 0.5%,,,,,Colossal X,Area + X * 1%,,,,,,,,,,,,
+,,,,,,,,,,,,,Vigor X,HP + X * 0.5,,,,,,,,,,,,
+,Piercing,Increase damage by 20% per enemy hit,,,,,Radiance,"1200 damage, frontal linear, applies 20 Fragility",,,,,Swiftness X,Cast + X * 1%,,,,,,,,,,,,
+,Brutal,Increase damage by up to 50% for nearby enemies,,,,,Electrified,"1000 damage, 12 random walk sparks, applies 2 Dazed",,,,,,,,,,,,,,,,,,
+,Precise,Increase damage by up to 100% for far enemies,,,,,Icy Veins,"370 damage, 5 projectile around character, ~1.4 circles each, applies 4 Slow",,,,,,,,,,,,,,,,,,
+,Impactful,Increase damage by up to 50% for enemies close to the center of the aoe,,,,,Purity,"800 damage in an area around you, heals 3 if it hits 4+ enemies",,,,,Crit -> Doom 240 / Burn 360 / Bleed 280 / Poison 240 / Disarray 1,,,,,,,,,,,,,
+,Devastating,Deals 3x damage on crit hit,,,,,Ammunition,"Multicast extra 5 times, only works on skills that can multicast",,,,,Burn -> Slow -> Disarray -> Bleed -> Poison -> Doom -> Burn,,,,,,,,,,,,,
+,Chaotic,Has (base CD * 20%) chance to activate another skill ,,,,,Retaliation,"When taking damage, reduce 20 + randomly cast one skill",,,,,,,,,,,,,,,,,,
+,Cunning,Cunning summons prioritize Elites and Lords,,,,,Cursed,"Summons a static tentacle (max 7) that fights for you, lasts for 20s
+Tentacle 800 dmg, 2.0s attack cd, 5 Fragility on hit",,,,,Finesse -> Bulwark -> Aptitude -> Prowess -> Resilience -> Form -> Haste -> Finesse,,,,,,,,,,,,,
+,Ancestry,"Summons a totem (max 7) that deals damage based on max hp
+Totem 400 dmg, 1.0s attack cd",,,,,Fortitude,"Fortitude summons damage is multiplied, based on your max health",,,,,,,,,,,,,,,,,,
+,Ambush,Ambush is validated if hitting a stunned or backturned enemy,,,,,Gunpowder,Blocks ammunition consumption. Consume 20 stacks of ammunition to be fired 5 times,,,,,,,,,,,,,,,,,,
+,,,,,,,Condemned,"Critical hits consume 10 stacks to increase direct damage by 500%.
+Can't be consumed by hits without direct damage.",,,,,Caps for buff and most debuff stacks are 800 soft and 1000 hard ,,,,,,,,,,,,,
+,,,,,,,Divinity,Casts skill when reaches 15 Purity stacks,,,,,"Cap(X) = X / (1 + max(X - soft, 0) / hard)",,,,,,Default,,Quality Standards,,Commoner,,Both,
+,,,,,,,,,,,,,Normal foes,,"Exceptions (debuffs only):
+Titans & Event bosses",,,,Weight,Chance of best,Weight,Chance of best,Weight,Chance of best,Weight,Chance of best
+,Requirement:,,,,,"Source can be active skill, rune, on hit/crit/synergy passive, ascension, artifact power, node in character skill tree",,,,,,,Soft cap,800,Soft cap,160,,Rarity,,3,,2,,3,,2
+,Buff synergy from A to B,,2 sources of A,,Finesse -> Bulwark -> Amptitude -> Prowess -> Resilience -> Form -> Haste -> Finesse,,,,,,,,Hard cap,1000,Hard cap,200,,Legendary,1.09%,3.23%,1.68%,3.33%,0.00%,0.00%,0.00%,0.00%
+,Skill chain from type A to B,,2 skills with A,,e.g. Swing - Thrust (Skills with cd > 8s don't count),,,,,,,,Effect,Stacks,Effect,Stacks,,Epic,4.35%,12.21%,6.72%,12.76%,0.00%,0.00%,0.00%,0.00%
+,Type A to nonType A buff,,"2 skills with A
+and 2 skills without A",,"Only affects active skills. No effect on ascensions, artifact powers, consumable buffs such as Electrified",,,,,,,,800,800,160,160,,Rare,13.04%,30.38%,20.17%,32.88%,18.48%,45.83%,28.57%,48.98%
+,Debuff synergy from A to B,,2 sources of A,,Burn 450 (3) -> Slow 2 -> Disarray 1 -> Bleed 360 (3) -> Poison 300 (3) -> Doom 300 (3) -> Burn,,,,,,,,820,911,170,227,,Uncommon,27.17%,38.12%,71.43%,51.02%,27.17%,38.12%,71.43%,51.02%
+,Chance to apply A on hit,,1 source of A,,"Burn 180 (2), Slow 2, Disarray 1, Bleed 120 (2), Poison 120 (2), Doom 120 (2)",,,,,,,,840,"1,050",180,360,,Common,54.35%,16.05%,,,54.35%,16.05%,,
+,Chance to apply A on crit,,2 sources of A,,Crit -> Doom 240 (2) / Burn 360 (2) / Bleed 280 (2) / Poison 240 (2) / Disarray 1 / Slow 2,,,,,,,,860,"1,229",190,760,,,,,,,,,,
+,Instant damage on applying A,,3 sources of A,,"Burn, Poison, Doom, Bleed. 
+Deals damage on top of existing effect, therefore more overall damage. Can be stacked over 100%",,,,,,,,880,"1,467",195,"1,560",,Note: Rarity is rolled first and then possible cards within the rarity is rolled,,,,,,,,
+,Increase damage of A,,3 sources of A,,"Burn, Poison, Doom, Bleed.
+Multiplicative damage bonus.",,,,,,,,900,"1,800",199,"7,960",,,,,,,,,,
+,Increase tick rate of A,,3 sources of A,,"Burn, Poison, Bleed.
+More ticks, same duration, therefore more overall damage. Multiplicative with Elemental Flow",,,,,,,,925,"2,467",,,,,,,,,,,,
+,,,,,,,,,,,,,950,"3,800","Exceptions (debuffs only):
+Shadow bosses in Titan hunt mode",,,,,,,,,,,
+,,"orange = green, blue, purple rarity",,,,,,,,,,,975,"7,800",,,,,,,,,,,,
+,,"red = white, green rarity",,,,,,,,,,,990,"19,800",Soft cap,480,,,,,,,,,,
+,,,,,,,,,,,,,995,"39,800",Hard cap,600,,,,,,,,,,

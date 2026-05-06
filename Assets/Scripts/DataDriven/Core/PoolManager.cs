@@ -71,6 +71,17 @@ public class PoolManager : MonoBehaviour
         manager.InternalRelease(instanceObject);
     }
 
+    public static void MarkPoolableCacheDirty(GameObject instanceObject)
+    {
+        if (instanceObject == null)
+        {
+            return;
+        }
+
+        PoolableObject poolableObject = instanceObject.GetComponent<PoolableObject>();
+        poolableObject?.MarkPoolableCacheDirty();
+    }
+
     private GameObject InternalSpawn(GameObject prefab, Vector3 position, Quaternion rotation, Transform parent)
     {
         if (prefab == null)
@@ -226,11 +237,20 @@ public class PoolManager : MonoBehaviour
 
     private static void NotifyPoolables(GameObject instanceObject, bool takenFromPool)
     {
-        MonoBehaviour[] behaviours = instanceObject.GetComponentsInChildren<MonoBehaviour>(true);
+        PoolableObject poolableObject = instanceObject.GetComponent<PoolableObject>();
 
-        foreach (MonoBehaviour behaviour in behaviours)
+        if (poolableObject == null)
         {
-            if (behaviour is not IPoolable poolable)
+            return;
+        }
+
+        IPoolable[] poolables = poolableObject.GetPoolables();
+
+        for (int i = 0; i < poolables.Length; i++)
+        {
+            IPoolable poolable = poolables[i];
+
+            if (poolable == null)
             {
                 continue;
             }

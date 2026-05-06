@@ -15,6 +15,7 @@ MonoBehaviour:
   weaponId: knight_sword
   displayName: "\u0420\u044B\u0446\u0430\u0440\u0441\u043A\u0438\u0439 \u043C\u0435\u0447"
   icon: {fileID: 0}
+  visualPrefab: {fileID: 64011676848679918, guid: 4dd4746b9430bb849a1eb0fcfc472d39, type: 3}
   startingSkill: {fileID: 11400000, guid: 0a1808c0416b4134a85f4626367db1fa, type: 2}
   uniqueSkillPool:
   - {fileID: 11400000, guid: 0a1808c0416b4134a85f4626367db1fa, type: 2}

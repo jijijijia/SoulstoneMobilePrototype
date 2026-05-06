@@ -30,6 +30,7 @@ public class DataDrivenProjectileSkill : SkillBehaviourBase
         }
 
         timer = 0f;
+        PlayOwnerAttackVisual();
 
         int executionCount = Context.GetExecutionCount();
 
@@ -87,6 +88,7 @@ public class DataDrivenProjectileSkill : SkillBehaviourBase
         if (projectile == null)
         {
             projectile = projectileObject.AddComponent<DataDrivenProjectile>();
+            PoolManager.MarkPoolableCacheDirty(projectileObject);
         }
 
         projectile.Initialize(direction, projectileSpeed, projectileLifetime, projectileDamage, Context.SkillData.AppliedStatuses);

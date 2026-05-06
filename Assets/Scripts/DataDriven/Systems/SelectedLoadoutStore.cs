@@ -4,6 +4,8 @@ public static class SelectedLoadoutStore
 {
     private const string SelectedMapIdKey = "soulstone.selected_map_id";
     private const string SelectedWeaponPrefix = "soulstone.selected_weapon_id.";
+    private const string ProfileSelectedMapIdKey = "selected_map_id";
+    private const string ProfileSelectedWeaponPrefix = "selected_weapon_id.";
     private const string DefaultMapDatabaseResourcePath = "MapDatabase";
 
     private static MapDatabase cachedMapDatabase;
@@ -20,7 +22,15 @@ public static class SelectedLoadoutStore
 
     public static string GetSelectedMapId()
     {
-        return PlayerPrefs.GetString(SelectedMapIdKey, string.Empty);
+        PlayerProfileData profile = SaveSystem.CurrentProfile;
+
+        if (profile != null && !string.IsNullOrWhiteSpace(profile.selectedMapId))
+        {
+            return profile.selectedMapId;
+        }
+
+        string profileKey = GameProfileStore.GetProfileKey(ProfileSelectedMapIdKey);
+        return PlayerPrefs.GetString(profileKey, PlayerPrefs.GetString(SelectedMapIdKey, string.Empty));
     }
 
     public static void SetSelectedMap(string mapId)
@@ -30,7 +40,8 @@ public static class SelectedLoadoutStore
             return;
         }
 
-        PlayerPrefs.SetString(SelectedMapIdKey, mapId);
+        SaveSystem.SetSelectedMap(mapId);
+        PlayerPrefs.SetString(GameProfileStore.GetProfileKey(ProfileSelectedMapIdKey), mapId);
         PlayerPrefs.Save();
     }
 
@@ -61,7 +72,15 @@ public static class SelectedLoadoutStore
             return string.Empty;
         }
 
-        return PlayerPrefs.GetString(GetWeaponKey(characterData), string.Empty);
+        PlayerProfileData profile = SaveSystem.CurrentProfile;
+
+        if (profile != null && !string.IsNullOrWhiteSpace(profile.selectedWeaponId))
+        {
+            return profile.selectedWeaponId;
+        }
+
+        string profileKey = GetProfileWeaponKey(characterData);
+        return PlayerPrefs.GetString(profileKey, PlayerPrefs.GetString(GetWeaponKey(characterData), string.Empty));
     }
 
     public static void SetSelectedWeapon(CharacterData characterData, WeaponData weaponData)
@@ -73,7 +92,8 @@ public static class SelectedLoadoutStore
             return;
         }
 
-        PlayerPrefs.SetString(GetWeaponKey(characterData), weaponData.WeaponId);
+        SaveSystem.SetSelectedWeapon(weaponData.WeaponId);
+        PlayerPrefs.SetString(GetProfileWeaponKey(characterData), weaponData.WeaponId);
         PlayerPrefs.Save();
     }
 
@@ -123,5 +143,10 @@ public static class SelectedLoadoutStore
     private static string GetWeaponKey(CharacterData characterData)
     {
         return SelectedWeaponPrefix + characterData.CharacterId;
+    }
+
+    private static string GetProfileWeaponKey(CharacterData characterData)
+    {
+        return GameProfileStore.GetProfileKey(ProfileSelectedWeaponPrefix + characterData.CharacterId);
     }
 }

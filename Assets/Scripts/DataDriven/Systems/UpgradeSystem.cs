@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class UpgradeSystem : MonoBehaviour
@@ -20,10 +19,25 @@ public class UpgradeSystem : MonoBehaviour
     {
         if (owner.CharacterData == null)
         {
-            return Enumerable.Empty<UpgradeData>();
+            yield break;
         }
 
-        return owner.CharacterData.GlobalUpgradePool.Where(CanOfferUpgrade);
+        UpgradeData[] upgradePool = owner.CharacterData.GlobalUpgradePool;
+
+        if (upgradePool == null)
+        {
+            yield break;
+        }
+
+        for (int i = 0; i < upgradePool.Length; i++)
+        {
+            UpgradeData upgrade = upgradePool[i];
+
+            if (CanOfferUpgrade(upgrade))
+            {
+                yield return upgrade;
+            }
+        }
     }
 
     public bool CanOfferUpgrade(UpgradeData upgradeData)

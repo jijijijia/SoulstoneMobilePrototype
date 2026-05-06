@@ -15,17 +15,30 @@ MonoBehaviour:
   enemyId: enemy_tank
   displayName: Tank Enemy
   category: 1
-  prefab: {fileID: 2151357740369669093, guid: 43ec4f7f91c398c44900d4491243c6d2, type: 3}
+  prefab: {fileID: 7349472490721787828, guid: d4cccdcff9cd3ab4787d2bacec08e523, type: 3}
   attackSkill: {fileID: 0}
+  abilityConfig: {fileID: 11400000, guid: cead19716e024ca6b3dab80e8bc3bd04, type: 2}
+  attackType: 0
   baseStats:
   - statType: 1
-    value: 2.2
+    value: 2.1
   - statType: 0
-    value: 120
+    value: 150
   - statType: 9
-    value: 25
-  spawnCost: 2
-  spawnWeight: 0.6
+    value: 17
+  - statType: 24
+    value: 140
+  spawnCost: 3
+  spawnWeight: 0.5
   unlockPlayerLevel: 5
   killRequirement: 0
-  experienceReward: 2
+  experienceReward: 3
+  visualScaleMultiplier: 1
+  tintColor: {r: 1, g: 1, b: 1, a: 1}
+  preferredDistance: 1.4
+  attackInterval: 1
+  projectileSpeed: 10
+  projectileLifetime: 4
+  projectileScale: 0.4
+  projectileColor: {r: 0, g: 1, b: 0, a: 1}
+  attackStatuses: []

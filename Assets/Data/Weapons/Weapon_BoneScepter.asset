@@ -15,11 +15,10 @@ MonoBehaviour:
   weaponId: bone_scepter
   displayName: "\u041A\u043E\u0441\u0442\u044F\u043D\u043E\u0439 \u0441\u043A\u0438\u043F\u0435\u0442\u0440"
   icon: {fileID: 0}
+  visualPrefab: {fileID: 2593821601145475444, guid: 7dd7eabf2b778674baa740649d7658e5, type: 3}
   startingSkill: {fileID: 11400000, guid: 45646d1f041612746975235c3e8847a1, type: 2}
   uniqueSkillPool:
   - {fileID: 11400000, guid: 45646d1f041612746975235c3e8847a1, type: 2}
   - {fileID: 11400000, guid: 46015dc9ddc71e04b82d620126c69db4, type: 2}
   - {fileID: 11400000, guid: 3ae3d869001bd264f9b43e3fc5aa1ffa, type: 2}
-  - {fileID: 11400000, guid: 45646d1f041612746975235c3e8847a1, type: 2}
-  - {fileID: 11400000, guid: ef9fc16d7ce024c46b76d0f267ab045c, type: 2}
   - {fileID: 11400000, guid: 02b26f14e0e19324698a90a526991020, type: 2}

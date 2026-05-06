@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CircularSweepAttackDeliveryDefinition
   radius: 2.8
   sweepDuration: 0.22
+  sweepAngle: 360
   arcWidth: 80
   clockwise: 1

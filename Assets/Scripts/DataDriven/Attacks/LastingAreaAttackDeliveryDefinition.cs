@@ -34,6 +34,7 @@ public class LastingAreaAttackDeliveryDefinition : AttackDeliveryDefinition
             if (zone == null)
             {
                 zone = zoneObject.AddComponent<RuntimeDamageZone>();
+                PoolManager.MarkPoolableCacheDirty(zoneObject);
             }
 
             zone.Initialize(resolvedRadius, duration, tickInterval, payload.Damage, statuses);

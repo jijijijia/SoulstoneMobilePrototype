@@ -20,3 +20,6 @@ MonoBehaviour:
   pierceCount: 0
   ricochetCount: 0
   ricochetSearchRadius: 6
+  forkGenerations: 0
+  forkProjectileCount: 0
+  forkSpreadAngle: 35

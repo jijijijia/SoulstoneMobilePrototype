@@ -4,6 +4,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Soulstone/Data/Attack Delivery/Area Pulse", fileName = "AreaPulseAttackDelivery")]
 public class AreaPulseAttackDeliveryDefinition : AttackDeliveryDefinition
 {
+    private readonly List<EnemyAgent> enemies = new();
+
     [SerializeField] private float radius = 2.5f;
     [SerializeField] private float visualLifetime = 0.35f;
     [SerializeField] private float visualHeight = 0.1f;
@@ -17,8 +19,6 @@ public class AreaPulseAttackDeliveryDefinition : AttackDeliveryDefinition
 
         float resolvedRadius = context.SkillContext.ResolveAreaRadius(radius);
         StatusEffectData[] statuses = payload.ToStatusArray();
-
-        List<EnemyAgent> enemies = new();
 
         for (int i = 0; i < targets.Count; i++)
         {

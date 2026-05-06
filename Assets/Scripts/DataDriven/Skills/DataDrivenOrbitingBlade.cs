@@ -67,6 +67,7 @@ public class DataDrivenOrbitingBlade : SkillBehaviourBase
             if (hitbox == null)
             {
                 hitbox = bladeObject.AddComponent<DataDrivenOrbitingBladeHitbox>();
+                PoolManager.MarkPoolableCacheDirty(bladeObject);
             }
 
             blades.Add(hitbox);

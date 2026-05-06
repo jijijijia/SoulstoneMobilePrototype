@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a8ec99bb2102374ab0de156e52bef09, type: 3}
   m_Name: Targeting_NearestEnemy
   m_EditorClassIdentifier: Assembly-CSharp::NearestEnemyTargetingDefinition
-  targetCount: 1
-  maxDistance: 17
+  targetCount: 2
+  maxDistance: 13

@@ -14,12 +14,28 @@ public class SkillRuntimeContext
 
     public float ApplySkillModifiers(float value, StatType statType)
     {
-        if (SkillData == null || UpgradeSystem == null)
+        if (SkillData == null)
         {
             return value;
         }
 
-        UpgradeSystem.GetSkillModifierTotals(SkillData, statType, out float additive, out float multiplier);
+        float additive = 0f;
+        float multiplier = 0f;
+
+        if (UpgradeSystem != null)
+        {
+            UpgradeSystem.GetSkillModifierTotals(SkillData, statType, out additive, out multiplier);
+        }
+
+        WeaponSystem weaponSystem = Owner != null ? Owner.WeaponSystem : null;
+
+        if (weaponSystem != null)
+        {
+            weaponSystem.GetSkillModifierTotals(SkillData, statType, out float weaponAdditive, out float weaponMultiplier);
+            additive += weaponAdditive;
+            multiplier += weaponMultiplier;
+        }
+
         return (value + additive) * (1f + multiplier);
     }
 

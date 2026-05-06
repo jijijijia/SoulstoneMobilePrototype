@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92b60a4ae001aa1489f1eb87d0dc1124, type: 3}
+  m_Name: Weapon_ThunderSpear
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponData
+  weaponId: thunder_spear
+  displayName: "\u041A\u043E\u043F\u044C\u0451 \u0433\u0440\u043E\u043C\u0430"
+  icon: {fileID: 0}
+  visualPrefab: {fileID: 7630173950005585897, guid: 9493b64a78ee9cf4a84dd7782868778b, type: 3}
+  startingSkill: {fileID: 11400000, guid: 3ae3d869001bd264f9b43e3fc5aa1ffa, type: 2}
+  uniqueSkillPool:
+  - {fileID: 11400000, guid: 3ae3d869001bd264f9b43e3fc5aa1ffa, type: 2}
+  - {fileID: 11400000, guid: ac6576261dff4afe9c7d6b403a4700a8, type: 2}
+  - {fileID: 11400000, guid: d92be85d176241599e296a465014baea, type: 2}

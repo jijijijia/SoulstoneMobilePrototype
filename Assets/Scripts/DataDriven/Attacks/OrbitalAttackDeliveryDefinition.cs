@@ -18,8 +18,8 @@ public class OrbitalAttackDeliveryDefinition : AttackDeliveryDefinition
             return;
         }
 
-        GameObject orbitalObject = new("RuntimeOrbitalAttack");
-        RuntimeOrbitalAttack orbital = orbitalObject.AddComponent<RuntimeOrbitalAttack>();
+        GameObject orbitalObject = PoolManager.Spawn(DefaultRuntimePrefabFactory.GetOrbitalAttackPrefab(), context.Owner.transform.position, Quaternion.identity);
+        RuntimeOrbitalAttack orbital = orbitalObject.GetComponent<RuntimeOrbitalAttack>();
         orbital.Initialize(
             context.Owner.transform,
             Mathf.Max(1, orbitalCount),

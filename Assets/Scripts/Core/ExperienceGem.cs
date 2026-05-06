@@ -7,6 +7,7 @@ public class ExperienceGem : MonoBehaviour, IPoolable
 
     private CharacterSystem characterSystem;
     private ProgressionSystem progressionSystem;
+    private bool attemptedFallbackResolve;
 
     public void SetCollector(CharacterSystem targetCharacter)
     {
@@ -23,7 +24,7 @@ public class ExperienceGem : MonoBehaviour, IPoolable
     {
         transform.Rotate(0f, rotationSpeed * Time.deltaTime, 0f, Space.World);
 
-        ResolveTargetReferences();
+        ResolveTargetReferencesOnce();
 
         if (characterSystem == null || progressionSystem == null)
         {
@@ -33,12 +34,13 @@ public class ExperienceGem : MonoBehaviour, IPoolable
         Vector3 playerPosition = characterSystem.transform.position;
         playerPosition.y = transform.position.y;
 
-        float distanceToPlayer = Vector3.Distance(transform.position, playerPosition);
         float pickupRadius = characterSystem.RuntimeStats != null
             ? characterSystem.RuntimeStats.GetValue(StatType.PickupRadius)
             : 0f;
 
-        if (distanceToPlayer <= pickupRadius)
+        float pickupRadiusSqr = pickupRadius * pickupRadius;
+
+        if ((transform.position - playerPosition).sqrMagnitude <= pickupRadiusSqr)
         {
             progressionSystem.AddExperience(experienceValue);
             PoolManager.Release(gameObject);
@@ -49,16 +51,25 @@ public class ExperienceGem : MonoBehaviour, IPoolable
     {
         characterSystem = null;
         progressionSystem = null;
+        attemptedFallbackResolve = false;
     }
 
     public void OnReturnedToPool()
     {
         characterSystem = null;
         progressionSystem = null;
+        attemptedFallbackResolve = false;
     }
 
-    private void ResolveTargetReferences()
+    private void ResolveTargetReferencesOnce()
     {
+        if (attemptedFallbackResolve || characterSystem != null)
+        {
+            return;
+        }
+
+        attemptedFallbackResolve = true;
+
         if (characterSystem == null)
         {
             characterSystem = FindFirstObjectByType<CharacterSystem>();

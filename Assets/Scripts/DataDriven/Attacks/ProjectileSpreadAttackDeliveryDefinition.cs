@@ -13,6 +13,9 @@ public class ProjectileSpreadAttackDeliveryDefinition : AttackDeliveryDefinition
     [SerializeField] private int pierceCount;
     [SerializeField] private int ricochetCount;
     [SerializeField] private float ricochetSearchRadius = 6f;
+    [SerializeField] private int forkGenerations;
+    [SerializeField] private int forkProjectileCount;
+    [SerializeField] private float forkSpreadAngle = 35f;
 
     public override void Deliver(AttackRuntimeContext context, IReadOnlyList<AttackTargetData> targets, AttackResolvedPayload payload)
     {
@@ -51,9 +54,22 @@ public class ProjectileSpreadAttackDeliveryDefinition : AttackDeliveryDefinition
             if (projectile == null)
             {
                 projectile = projectileObject.AddComponent<ModularProjectile>();
+                PoolManager.MarkPoolableCacheDirty(projectileObject);
             }
 
-            projectile.Initialize(direction, speed, lifetime, payload.Damage, statuses, pierceCount, ricochetCount, ricochetSearchRadius);
+            projectile.Initialize(
+                direction,
+                speed,
+                lifetime,
+                payload.Damage,
+                statuses,
+                pierceCount,
+                ricochetCount,
+                ricochetSearchRadius,
+                forkGenerations,
+                forkProjectileCount,
+                forkSpreadAngle,
+                projectilePrefab);
         }
     }
 

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Targeting_RandomEnemies
   m_EditorClassIdentifier: Assembly-CSharp::RandomEnemyTargetingDefinition
   targetCount: 3
-  maxDistance: 18
+  maxDistance: 16

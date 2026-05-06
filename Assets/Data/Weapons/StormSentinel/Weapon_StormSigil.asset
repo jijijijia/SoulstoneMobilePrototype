@@ -15,6 +15,7 @@ MonoBehaviour:
   weaponId: stormsentinel_weapon
   displayName: Storm Sigil
   icon: {fileID: 0}
+  visualPrefab: {fileID: 659128215564434022, guid: e1fd418ebc93ba34bb1757d0c465b6a5, type: 3}
   startingSkill: {fileID: 11400000, guid: ac6576261dff4afe9c7d6b403a4700a8, type: 2}
   uniqueSkillPool:
   - {fileID: 11400000, guid: ac6576261dff4afe9c7d6b403a4700a8, type: 2}
@@ -23,4 +24,3 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 97491b0e9cc742b09e6ce7780b692d77, type: 2}
   - {fileID: 11400000, guid: d92be85d176241599e296a465014baea, type: 2}
   - {fileID: 11400000, guid: 540f2fb5e0884e22a6d7e6993c4818ef, type: 2}
-  weaponStatModifiers: []

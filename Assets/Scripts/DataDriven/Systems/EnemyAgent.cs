@@ -9,54 +9,70 @@ public class EnemyAgent : MonoBehaviour, IPoolable
     [SerializeField] private float obstacleProbeDistance = 2.5f;
     [SerializeField] private float obstacleProbeRadiusMultiplier = 0.45f;
     [SerializeField] private float obstacleProbeHeight = 0.8f;
+    [SerializeField] private float summonAggroRadius = 8f;
+    [SerializeField] private float summonStrongFocusDistanceRatio = 0.5f;
+    [SerializeField] private float summonSoftFocusChance = 0.5f;
+    [SerializeField] private float aggroReevaluationInterval = 0.45f;
+    [SerializeField] private float directPlayerAggroDuration = 2f;
     [SerializeField] private float[] avoidanceAngles = { 25f, -25f, 50f, -50f, 80f, -80f, 115f, -115f };
 
     private CharacterController characterController;
     private RuntimeStats runtimeStats;
     private EnemyData enemyData;
     private CharacterSystem target;
+    private RuntimeSummonedMinion summonTarget;
     private SpawnSystem spawnSystem;
     private float currentHealth;
-    private Vector3 velocity;
-    private float damageTimer;
     private Collider[] hitColliders;
-    private Renderer[] renderers;
     private StatusController statusController;
-    private Vector3 initialScale;
-    private Color[] defaultColors;
+    private EnemyVisualProfile visualProfile;
+    private Transform importedVisualRoot;
+    private EnemyMovementController movementController;
+    private CombatVisualAnimator combatVisualAnimator;
+    private readonly EnemyProjectileShooter projectileShooter = new();
+    private EnemyAbilityRunner abilityRunner;
     private bool isDespawning;
-    private float laneOffset;
-    private float personalPreferredDistance;
+    private float nextAggroEvaluationTime;
+    private float lastDirectPlayerDamageTime = -999f;
 
     public EnemyData Data => enemyData;
     public bool IsDead => isDespawning || currentHealth <= 0f;
+    public float CurrentHealth => currentHealth;
+    public float MaxHealth => runtimeStats != null ? runtimeStats.GetValue(StatType.MaxHealth) : 0f;
     public StatusController StatusController => statusController;
+
+    public void AddStatModifiers(string sourceId, StatModifierData[] modifiers) => runtimeStats?.AddModifiers(sourceId, modifiers);
+    public void RemoveStatModifiers(string sourceId) => runtimeStats?.RemoveModifiers(sourceId);
 
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
         hitColliders = GetComponents<Collider>();
-        renderers = GetComponentsInChildren<Renderer>(true);
+        importedVisualRoot = transform.Find("ImportedVisual");
+        visualProfile = new EnemyVisualProfile(transform, GetComponentsInChildren<Renderer>(true));
+        abilityRunner = new EnemyAbilityRunner(projectileShooter);
+        movementController = new EnemyMovementController(
+            transform,
+            characterController,
+            gravity,
+            meleeLaneOffsetStrength,
+            meleePreferredDistanceVariance,
+            obstacleProbeDistance,
+            obstacleProbeRadiusMultiplier,
+            obstacleProbeHeight,
+            avoidanceAngles);
+        combatVisualAnimator = GetComponent<CombatVisualAnimator>();
+
+        if (combatVisualAnimator == null)
+        {
+            combatVisualAnimator = gameObject.AddComponent<CombatVisualAnimator>();
+        }
+
         statusController = GetComponent<StatusController>();
 
         if (statusController == null)
         {
             statusController = gameObject.AddComponent<StatusController>();
-        }
-
-        initialScale = transform.localScale;
-        defaultColors = new Color[renderers.Length];
-
-        for (int i = 0; i < renderers.Length; i++)
-        {
-            if (renderers[i] != null && renderers[i].sharedMaterial != null && renderers[i].sharedMaterial.HasProperty("_Color"))
-            {
-                defaultColors[i] = renderers[i].sharedMaterial.color;
-            }
-            else
-            {
-                defaultColors[i] = Color.white;
-            }
         }
 
         foreach (Collider hitCollider in hitColliders)
@@ -90,12 +106,34 @@ public class EnemyAgent : MonoBehaviour, IPoolable
         runtimeStats.SetBaseValue(StatType.MaxHealth, runtimeStats.GetValue(StatType.MaxHealth) * healthMultiplier);
         runtimeStats.SetBaseValue(StatType.ContactDamage, runtimeStats.GetValue(StatType.ContactDamage) * damageMultiplier);
         currentHealth = runtimeStats.GetValue(StatType.MaxHealth);
-        damageTimer = 0f;
-        velocity = Vector3.zero;
         isDespawning = false;
-        InitializeMovementProfile();
+        movementController.Initialize(enemyData, runtimeStats);
+        abilityRunner.Initialize(enemyData, runtimeStats, spawnSystem);
         statusController.Initialize(this, runtimeStats);
-        ApplyVisualProfile();
+        visualProfile.Apply(enemyData);
+        NormalizeImportedVisualScale();
+        ConfigureVisualAnimator();
+    }
+
+    private void NormalizeImportedVisualScale()
+    {
+        if (importedVisualRoot == null)
+        {
+            importedVisualRoot = transform.Find("ImportedVisual");
+        }
+
+        if (importedVisualRoot == null)
+        {
+            return;
+        }
+
+        Vector3 rootScale = transform.localScale;
+        float visualUniformScale = Mathf.Max(Mathf.Abs(rootScale.x), Mathf.Abs(rootScale.z), 0.01f);
+
+        importedVisualRoot.localScale = new Vector3(
+            Mathf.Approximately(rootScale.x, 0f) ? visualUniformScale : visualUniformScale / rootScale.x,
+            Mathf.Approximately(rootScale.y, 0f) ? visualUniformScale : visualUniformScale / rootScale.y,
+            Mathf.Approximately(rootScale.z, 0f) ? visualUniformScale : visualUniformScale / rootScale.z);
     }
 
     private void Update()
@@ -105,23 +143,57 @@ public class EnemyAgent : MonoBehaviour, IPoolable
             return;
         }
 
+        RefreshCombatTarget();
+        abilityRunner.Tick();
         MoveToTarget();
+        combatVisualAnimator?.SetMoveVelocity(movementController.LastHorizontalVelocity);
+        EnemyRegistry.UpdatePosition(this);
         TryAttack();
         ClampInsideMap();
+        EnemyRegistry.UpdatePosition(this);
     }
 
     public void TakeDamage(float damage)
+    {
+        TakeDamageInternal(damage, true);
+    }
+
+    public void TakeDamageFromSummon(float damage)
+    {
+        TakeDamageInternal(damage, false);
+    }
+
+    private void TakeDamageInternal(float damage, bool forcePlayerAggro)
     {
         if (isDespawning || enemyData == null)
         {
             return;
         }
 
-        currentHealth -= ResolveIncomingDamage(damage);
+        if (forcePlayerAggro)
+        {
+            lastDirectPlayerDamageTime = Time.time;
+            summonTarget = null;
+            nextAggroEvaluationTime = Time.time + aggroReevaluationInterval;
+        }
+
+        float resolvedDamage = ResolveIncomingDamage(damage);
+        currentHealth -= resolvedDamage;
+        CombatFeedbackEvents.RaiseDamageTaken(new CombatFeedbackEvent(
+            transform,
+            transform.position,
+            resolvedDamage,
+            isPlayerTarget: false));
 
         if (currentHealth <= 0f)
         {
             isDespawning = true;
+
+            if (enemyData?.AbilityDeliveryType == EnemyAbilityDeliveryType.DeathExplosion)
+            {
+                float deathDamage = runtimeStats.GetValue(StatType.ContactDamage) * enemyData.AbilityDamageMultiplier;
+                abilityRunner.ExecuteDeathExplosion(transform, target, summonTarget, deathDamage);
+            }
 
             if (spawnSystem != null && enemyData != null)
             {
@@ -139,82 +211,147 @@ public class EnemyAgent : MonoBehaviour, IPoolable
 
     private void MoveToTarget()
     {
-        Vector3 direction = target.transform.position - transform.position;
-        direction.y = 0f;
-
-        float distance = direction.magnitude;
-        float desiredDistance = personalPreferredDistance > 0f
-            ? personalPreferredDistance
-            : (enemyData != null ? enemyData.PreferredDistance : 1.4f);
-
-        if (enemyData != null && enemyData.AttackType == EnemyAttackType.RangedProjectile && distance < desiredDistance * 0.65f)
-        {
-            Vector3 retreatDirection = (-direction).normalized;
-            Vector3 navigableRetreat = ResolveNavigableDirection(retreatDirection, distance);
-            transform.forward = navigableRetreat;
-            characterController.Move(navigableRetreat * runtimeStats.GetValue(StatType.MoveSpeed) * Time.deltaTime);
-        }
-        else if (distance > desiredDistance)
-        {
-            Vector3 moveDirection = GetMoveDirection(direction, distance, desiredDistance);
-            Vector3 navigableDirection = ResolveNavigableDirection(moveDirection, distance - desiredDistance);
-            transform.forward = navigableDirection;
-            characterController.Move(navigableDirection * runtimeStats.GetValue(StatType.MoveSpeed) * Time.deltaTime);
-        }
-
-        if (characterController.isGrounded && velocity.y < 0f)
-        {
-            velocity.y = -2f;
-        }
-
-        velocity.y += gravity * Time.deltaTime;
-        characterController.Move(velocity * Time.deltaTime);
+        Transform combatTarget = GetCombatTargetTransform();
+        movementController.MoveToTarget(
+            combatTarget,
+            target != null ? target.transform : null,
+            summonTarget != null ? summonTarget.transform : null);
     }
 
     private void TryAttack()
     {
-        Vector3 flatTargetPosition = target.transform.position;
-        flatTargetPosition.y = transform.position.y;
-        float distance = Vector3.Distance(transform.position, flatTargetPosition);
-        float preferredDistance = personalPreferredDistance > 0f
-            ? personalPreferredDistance
-            : (enemyData != null ? enemyData.PreferredDistance : 1.4f);
-        float attackInterval = enemyData != null ? enemyData.AttackInterval : 1f;
+        Transform combatTarget = GetCombatTargetTransform();
 
-        if (enemyData != null && enemyData.AttackType == EnemyAttackType.RangedProjectile)
-        {
-            if (distance > preferredDistance + 0.35f)
-            {
-                damageTimer = 0f;
-                return;
-            }
-        }
-        else
-        {
-            if (distance > preferredDistance + 0.1f)
-            {
-                damageTimer = 0f;
-                return;
-            }
-        }
-
-        damageTimer += Time.deltaTime;
-
-        if (damageTimer < attackInterval)
+        if (combatTarget == null)
         {
             return;
         }
 
-        damageTimer = 0f;
+        Vector3 flatTargetPosition = combatTarget.position;
+        flatTargetPosition.y = transform.position.y;
+        float distance = Vector3.Distance(transform.position, flatTargetPosition);
 
-        if (enemyData != null && enemyData.AttackType == EnemyAttackType.RangedProjectile)
+        if (abilityRunner.UsesRangedRange)
         {
-            FireProjectile(flatTargetPosition);
+            if (distance > abilityRunner.PreferredDistance + abilityRunner.RangeTolerance)
+            {
+                abilityRunner.ResetCooldown();
+                return;
+            }
         }
         else
         {
-            target.TakeDamage(runtimeStats.GetValue(StatType.ContactDamage));
+            float contactAttackDistance = movementController.GetContactAttackDistance(combatTarget);
+
+            if (distance > contactAttackDistance)
+            {
+                abilityRunner.ResetCooldown();
+                return;
+            }
         }
+
+        if (abilityRunner.TickAndTryExecute(transform, combatTarget, target, summonTarget))
+        {
+            combatVisualAnimator?.PlayAttack();
+        }
+    }
+
+    private void ConfigureVisualAnimator()
+    {
+        if (combatVisualAnimator == null)
+        {
+            return;
+        }
+
+        if (importedVisualRoot == null)
+        {
+            importedVisualRoot = transform.Find("ImportedVisual");
+        }
+
+        combatVisualAnimator.ConfigureVisualRoot(importedVisualRoot != null ? importedVisualRoot : transform);
+    }
+
+    private void RefreshCombatTarget()
+    {
+        if (target == null)
+        {
+            summonTarget = null;
+            return;
+        }
+
+        if (Time.time < nextAggroEvaluationTime && IsCurrentSummonTargetStillValid())
+        {
+            return;
+        }
+
+        nextAggroEvaluationTime = Time.time + aggroReevaluationInterval;
+        summonTarget = ResolveSummonAggroTarget();
+    }
+
+    private RuntimeSummonedMinion ResolveSummonAggroTarget()
+    {
+        if (WasRecentlyDirectlyAttackedByPlayer())
+        {
+            return null;
+        }
+
+        RuntimeSummonedMinion closestSummon = RuntimeSummonRegistry.GetClosestSummon(transform.position, summonAggroRadius);
+
+        if (closestSummon == null || !closestSummon.IsAlive)
+        {
+            return null;
+        }
+
+        float playerDistance = GetFlatDistance(target.transform.position);
+        float summonDistance = GetFlatDistance(closestSummon.transform.position);
+
+        if (playerDistance <= summonDistance)
+        {
+            return null;
+        }
+
+        if (summonDistance < playerDistance * Mathf.Clamp01(summonStrongFocusDistanceRatio))
+        {
+            return closestSummon;
+        }
+
+        return Random.value < Mathf.Clamp01(summonSoftFocusChance)
+            ? closestSummon
+            : null;
+    }
+
+    private bool IsCurrentSummonTargetStillValid()
+    {
+        if (summonTarget == null || !summonTarget.IsAlive || WasRecentlyDirectlyAttackedByPlayer())
+        {
+            return false;
+        }
+
+        float playerDistance = GetFlatDistance(target.transform.position);
+        float summonDistance = GetFlatDistance(summonTarget.transform.position);
+        return summonDistance < playerDistance && summonDistance <= summonAggroRadius;
+    }
+
+    private bool WasRecentlyDirectlyAttackedByPlayer()
+    {
+        return Time.time - lastDirectPlayerDamageTime <= directPlayerAggroDuration;
+    }
+
+    private float GetFlatDistance(Vector3 position)
+    {
+        Vector3 delta = position - transform.position;
+        delta.y = 0f;
+        return delta.magnitude;
+    }
+
+    private Transform GetCombatTargetTransform()
+    {
+        if (summonTarget != null && summonTarget.IsAlive)
+        {
+            return summonTarget.transform;
+        }
+
+        return target != null ? target.transform : null;
     }
 
     private void ClampInsideMap()
@@ -236,193 +373,23 @@ public class EnemyAgent : MonoBehaviour, IPoolable
 
     public void OnTakenFromPool()
     {
-        damageTimer = 0f;
-        velocity = Vector3.zero;
         isDespawning = false;
     }
 
     public void OnReturnedToPool()
     {
-        damageTimer = 0f;
-        velocity = Vector3.zero;
         isDespawning = false;
         target = null;
+        summonTarget = null;
+        nextAggroEvaluationTime = 0f;
+        lastDirectPlayerDamageTime = -999f;
         spawnSystem = null;
         enemyData = null;
         runtimeStats = null;
-        personalPreferredDistance = 0f;
-        laneOffset = 0f;
+        movementController.Reset();
+        abilityRunner.Reset();
         statusController?.ResetState();
-        ResetVisualProfile();
-    }
-
-    private void InitializeMovementProfile()
-    {
-        float basePreferredDistance = enemyData != null ? enemyData.PreferredDistance : 1.4f;
-
-        if (enemyData != null && enemyData.AttackType == EnemyAttackType.MeleeContact)
-        {
-            laneOffset = Random.Range(-meleeLaneOffsetStrength, meleeLaneOffsetStrength);
-            personalPreferredDistance = Mathf.Max(
-                0.6f,
-                basePreferredDistance + Random.Range(-meleePreferredDistanceVariance, meleePreferredDistanceVariance));
-            return;
-        }
-
-        laneOffset = 0f;
-        personalPreferredDistance = basePreferredDistance;
-    }
-
-    private Vector3 GetMoveDirection(Vector3 targetDirection, float distance, float desiredDistance)
-    {
-        Vector3 moveDirection = targetDirection.normalized;
-
-        if (enemyData == null || enemyData.AttackType != EnemyAttackType.MeleeContact || Mathf.Abs(laneOffset) <= 0.01f)
-        {
-            return moveDirection;
-        }
-
-        Vector3 tangent = Vector3.Cross(Vector3.up, moveDirection).normalized;
-        float laneWeight = Mathf.Clamp01((distance - desiredDistance) / 4f);
-        Vector3 offsetTarget = target.transform.position + tangent * laneOffset * laneWeight;
-        Vector3 offsetDirection = offsetTarget - transform.position;
-        offsetDirection.y = 0f;
-
-        return offsetDirection.sqrMagnitude > 0.001f
-            ? offsetDirection.normalized
-            : moveDirection;
-    }
-
-    private Vector3 ResolveNavigableDirection(Vector3 desiredDirection, float remainingDistance)
-    {
-        if (desiredDirection.sqrMagnitude <= 0.001f)
-        {
-            return Vector3.zero;
-        }
-
-        Vector3 flattenedDirection = desiredDirection.normalized;
-        float probeDistance = Mathf.Clamp(remainingDistance, 0.75f, obstacleProbeDistance);
-
-        if (IsPathClear(flattenedDirection, probeDistance))
-        {
-            return flattenedDirection;
-        }
-
-        for (int i = 0; i < avoidanceAngles.Length; i++)
-        {
-            Vector3 candidateDirection = Quaternion.Euler(0f, avoidanceAngles[i], 0f) * flattenedDirection;
-
-            if (IsPathClear(candidateDirection, probeDistance))
-            {
-                return candidateDirection.normalized;
-            }
-        }
-
-        return flattenedDirection;
-    }
-
-    private bool IsPathClear(Vector3 direction, float probeDistance)
-    {
-        if (direction.sqrMagnitude <= 0.001f)
-        {
-            return true;
-        }
-
-        Vector3 origin = transform.position + Vector3.up * obstacleProbeHeight;
-        float probeRadius = Mathf.Max(0.1f, characterController.radius * obstacleProbeRadiusMultiplier);
-
-        if (!Physics.SphereCast(origin, probeRadius, direction.normalized, out RaycastHit hit, probeDistance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
-        {
-            return true;
-        }
-
-        if (hit.collider == null)
-        {
-            return true;
-        }
-
-        Transform hitRoot = hit.collider.transform.root;
-
-        if (hitRoot == transform.root)
-        {
-            return true;
-        }
-
-        if (target != null && hitRoot == target.transform.root)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    private void ApplyVisualProfile()
-    {
-        if (enemyData == null)
-        {
-            return;
-        }
-
-        transform.localScale = initialScale * enemyData.VisualScaleMultiplier;
-
-        for (int i = 0; i < renderers.Length; i++)
-        {
-            Renderer targetRenderer = renderers[i];
-
-            if (targetRenderer == null || targetRenderer.material == null || !targetRenderer.material.HasProperty("_Color"))
-            {
-                continue;
-            }
-
-            targetRenderer.material.color = enemyData.TintColor;
-        }
-    }
-
-    private void ResetVisualProfile()
-    {
-        transform.localScale = initialScale;
-
-        for (int i = 0; i < renderers.Length; i++)
-        {
-            Renderer targetRenderer = renderers[i];
-
-            if (targetRenderer == null || targetRenderer.material == null || !targetRenderer.material.HasProperty("_Color"))
-            {
-                continue;
-            }
-
-            targetRenderer.material.color = i < defaultColors.Length ? defaultColors[i] : Color.white;
-        }
-    }
-
-    private void FireProjectile(Vector3 targetPosition)
-    {
-        GameObject projectilePrefab = DefaultRuntimePrefabFactory.GetEnemyProjectilePrefab();
-        Vector3 spawnPosition = transform.position + Vector3.up * 0.8f;
-        GameObject projectileObject = PoolManager.Spawn(projectilePrefab, spawnPosition, Quaternion.identity);
-        projectileObject.transform.localScale = Vector3.one * (enemyData != null ? enemyData.ProjectileScale : 0.4f);
-
-        Renderer projectileRenderer = projectileObject.GetComponent<Renderer>();
-
-        if (projectileRenderer != null && projectileRenderer.material != null && projectileRenderer.material.HasProperty("_Color"))
-        {
-            projectileRenderer.material.color = enemyData != null ? enemyData.ProjectileColor : Color.green;
-        }
-
-        EnemyProjectile projectile = projectileObject.GetComponent<EnemyProjectile>();
-
-        if (projectile == null)
-        {
-            projectile = projectileObject.AddComponent<EnemyProjectile>();
-        }
-
-        Vector3 direction = (targetPosition - spawnPosition).normalized;
-        projectile.Initialize(
-            direction,
-            enemyData != null ? enemyData.ProjectileSpeed : 10f,
-            enemyData != null ? enemyData.ProjectileLifetime : 4f,
-            runtimeStats.GetValue(StatType.ContactDamage),
-            enemyData != null ? enemyData.AttackStatuses : null);
+        visualProfile.Reset();
     }
 
     private float ResolveIncomingDamage(float rawDamage)

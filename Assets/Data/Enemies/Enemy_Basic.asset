@@ -15,17 +15,30 @@ MonoBehaviour:
   enemyId: enemy_basic
   displayName: Basic Enemy
   category: 0
-  prefab: {fileID: 2151357740369669093, guid: 52422012291d0a24581056854e92dd5f, type: 3}
+  prefab: {fileID: 1217349120818696852, guid: c6d9e24ce271d8e4d8f1d04d67ad1a8e, type: 3}
   attackSkill: {fileID: 0}
+  abilityConfig: {fileID: 11400000, guid: 3205bba8c57d4eea88c257234d7c739d, type: 2}
+  attackType: 0
   baseStats:
   - statType: 0
-    value: 50
+    value: 45
   - statType: 1
-    value: 3
+    value: 3.2
   - statType: 9
-    value: 10
+    value: 8
+  - statType: 24
+    value: 100
   spawnCost: 1
   spawnWeight: 1
   unlockPlayerLevel: 1
   killRequirement: 0
   experienceReward: 1
+  visualScaleMultiplier: 1
+  tintColor: {r: 1, g: 1, b: 1, a: 1}
+  preferredDistance: 1.4
+  attackInterval: 1
+  projectileSpeed: 10
+  projectileLifetime: 4
+  projectileScale: 0.4
+  projectileColor: {r: 0, g: 1, b: 0, a: 1}
+  attackStatuses: []

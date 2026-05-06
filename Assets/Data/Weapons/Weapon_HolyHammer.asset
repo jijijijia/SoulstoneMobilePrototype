@@ -15,6 +15,7 @@ MonoBehaviour:
   weaponId: holy_hammer
   displayName: "\u0421\u0432\u044F\u0449\u0435\u043D\u043D\u044B\u0439 \u043C\u043E\u043B\u043E\u0442"
   icon: {fileID: 0}
+  visualPrefab: {fileID: 7138430189373502731, guid: c4a9abb81d9864a488cd548bcba35cef, type: 3}
   startingSkill: {fileID: 11400000, guid: 5dc12bea1b976f0448dfe1a739b1601b, type: 2}
   uniqueSkillPool:
   - {fileID: 11400000, guid: 5dc12bea1b976f0448dfe1a739b1601b, type: 2}

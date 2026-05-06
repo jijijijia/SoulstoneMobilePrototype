@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ModularAttackSkill : SkillBehaviourBase
+public class ModularAttackSkill : SkillBehaviourBase, ISkillCooldownSource
 {
     private sealed class AttackState
     {
@@ -13,6 +13,57 @@ public class ModularAttackSkill : SkillBehaviourBase
     private readonly List<AttackState> attackStates = new();
     private readonly List<AttackTargetData> targetBuffer = new();
     private readonly AttackResolvedPayload payloadBuffer = new();
+
+    public float CooldownDuration
+    {
+        get
+        {
+            AttackState state = GetNextCooldownState();
+            return state != null ? state.Cooldown : 0f;
+        }
+    }
+
+    public float CooldownRemaining
+    {
+        get
+        {
+            AttackState state = GetNextCooldownState();
+            return state != null ? Mathf.Max(0f, state.Cooldown - state.Timer) : 0f;
+        }
+    }
+
+    public float CooldownNormalized
+    {
+        get
+        {
+            AttackState state = GetNextCooldownState();
+
+            if (state == null || state.Cooldown <= 0f)
+            {
+                return 1f;
+            }
+
+            return Mathf.Clamp01(state.Timer / state.Cooldown);
+        }
+    }
+
+    public bool IsReady
+    {
+        get
+        {
+            for (int i = 0; i < attackStates.Count; i++)
+            {
+                AttackState state = attackStates[i];
+
+                if (state != null && state.Timer >= state.Cooldown)
+                {
+                    return true;
+                }
+            }
+
+            return attackStates.Count == 0;
+        }
+    }
 
     public override void Initialize(SkillRuntimeContext context, int rank)
     {
@@ -122,6 +173,37 @@ public class ModularAttackSkill : SkillBehaviourBase
             executedAny = true;
         }
 
+        if (executedAny)
+        {
+            PlayOwnerAttackVisual();
+        }
+
         return executedAny;
+    }
+
+    private AttackState GetNextCooldownState()
+    {
+        AttackState bestState = null;
+        float bestRemaining = float.MaxValue;
+
+        for (int i = 0; i < attackStates.Count; i++)
+        {
+            AttackState state = attackStates[i];
+
+            if (state == null)
+            {
+                continue;
+            }
+
+            float remaining = Mathf.Max(0f, state.Cooldown - state.Timer);
+
+            if (remaining < bestRemaining)
+            {
+                bestRemaining = remaining;
+                bestState = state;
+            }
+        }
+
+        return bestState;
     }
 }

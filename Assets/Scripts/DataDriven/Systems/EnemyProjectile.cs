@@ -39,6 +39,20 @@ public class EnemyProjectile : MonoBehaviour, IPoolable
 
     private void OnTriggerEnter(Collider other)
     {
+        RuntimeSummonedMinion summon = other.GetComponent<RuntimeSummonedMinion>();
+
+        if (summon == null)
+        {
+            summon = other.GetComponentInParent<RuntimeSummonedMinion>();
+        }
+
+        if (summon != null && summon.IsAlive)
+        {
+            summon.TakeDamage(damage);
+            PoolManager.Release(gameObject);
+            return;
+        }
+
         CharacterSystem player = other.GetComponent<CharacterSystem>();
 
         if (player == null)

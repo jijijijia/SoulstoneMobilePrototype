@@ -44,11 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93c9e38fd0b9473db5e095ae0bb87920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapRuntimeBuilder
+  buildPrototypeGeometryOnAwake: 1
   mapSize: {x: 42, y: 42}
   groundHeight: 0.2
   groundColor: {r: 0.42, g: 0.34, b: 0.29, a: 1}
   obstacleColor: {r: 0.45, g: 0.36, b: 0.31, a: 1}
-  clearLegacySceneMapObjects: 1
+  clearLegacySceneMapObjects: 0
   obstacles:
   - name: Quarry_Wall_A
     position: {x: -4, y: 2, z: 1}

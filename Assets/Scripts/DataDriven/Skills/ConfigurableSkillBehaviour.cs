@@ -105,6 +105,11 @@ public class ConfigurableSkillBehaviour : SkillBehaviourBase
             executedAny = true;
         }
 
+        if (executedAny)
+        {
+            PlayOwnerAttackVisual();
+        }
+
         return executedAny;
     }
 
@@ -181,6 +186,7 @@ public class ConfigurableSkillBehaviour : SkillBehaviourBase
             if (projectile == null)
             {
                 projectile = projectileObject.AddComponent<ModularProjectile>();
+                PoolManager.MarkPoolableCacheDirty(projectileObject);
             }
 
             projectile.Initialize(direction, projectileSpeed, projectileLifetime, damage, Context.SkillData.AppliedStatuses);
@@ -218,6 +224,7 @@ public class ConfigurableSkillBehaviour : SkillBehaviourBase
         if (pulseVisual == null)
         {
             pulseVisual = visualObject.AddComponent<ShockwavePulseVisual>();
+            PoolManager.MarkPoolableCacheDirty(visualObject);
         }
 
         pulseVisual.Play(center, radius, duration);

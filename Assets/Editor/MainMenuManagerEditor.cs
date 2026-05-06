@@ -29,9 +29,15 @@ public class MainMenuManagerEditor : Editor
             CreateAndAssignDefaultCardPrefabs(menuManager);
         }
 
+        if (GUILayout.Button("Build Scene Skill Tree Panel"))
+        {
+            SkillTreeScenePanelBuilder.BuildSceneSkillTreePanel();
+        }
+
         EditorGUILayout.HelpBox(
             "Use Rebuild to create the editable menu frame inside the scene Canvas. " +
-            "Runtime data lists are still filled from assets automatically.",
+            "Runtime data lists are still filled from assets automatically. " +
+            "Use Build Scene Skill Tree Panel once if SkillTreePanel still shows placeholder text.",
             MessageType.Info);
     }
 

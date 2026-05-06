@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 669869054ad464343bec8554929ba598, type: 3}
+  m_Name: Attack_RaiseDead
+  m_EditorClassIdentifier: Assembly-CSharp::AttackDefinition
+  attackId: raise_dead
+  displayName: "\u041F\u043E\u0434\u043D\u044F\u0442\u044C \u043C\u0435\u0440\u0442\u0432\u044B\u0445"
+  baseCooldown: 5
+  cooldownReductionPerRank: 0
+  targeting: {fileID: 11400000, guid: 35329ae74c1a3f74cae34997c65a9873, type: 2}
+  delivery: {fileID: 11400000, guid: b4189a508de3eb0429176a4f9cb3edf7, type: 2}
+  impacts:
+  - {fileID: 11400000, guid: e27c6254307a94c42be1c7952fdaf273, type: 2}

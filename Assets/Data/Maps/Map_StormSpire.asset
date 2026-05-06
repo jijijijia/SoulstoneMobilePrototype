@@ -12,24 +12,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b9f5c75cf4e4d2b947394c5c92a7a64, type: 3}
   m_Name: Map_StormSpire
   m_EditorClassIdentifier: Assembly-CSharp::MapData
-  mapId: storm_spire
-  displayName: "\u0413\u0440\u043E\u0437\u043E\u0432\u043E\u0439 \u0448\u043F\u0438\u043B\u044C"
-  difficulty: "\u0412\u044B\u0441\u043E\u043A\u0430\u044F"
-  biome: "\u0411\u0430\u0448\u043D\u044F \u0448\u0442\u043E\u0440\u043C\u0430"
-  enemyDescription: "\u0411\u044B\u0441\u0442\u0440\u044B\u0435 \u044D\u043B\u0438\u0442\u044B, \u043C\u0430\u0433\u0438 \u043B\u044C\u0434\u0430 \u0438 \u043F\u043B\u043E\u0442\u043D\u044B\u0435 \u0432\u0440\u0430\u0433\u0438."
-  rewardsDescription: "\u0420\u0435\u0434\u043A\u0438\u0435 \u043D\u0430\u0432\u044B\u043A\u0438 \u043C\u043E\u043B\u043D\u0438\u0438."
-  mapPrefab: {fileID: 100000, guid: 2f36c4f059ec49729d4528b0d1669f11, type: 3}
+  mapId: stormglass_ruins
+  displayName: "\u0420\u0443\u0438\u043D\u044B \u0413\u0440\u043E\u0437\u043E\u0432\u043E\u0433\u043E
+    \u0421\u0442\u0435\u043A\u043B\u0430"
+  difficulty: "\u0421\u043B\u043E\u0436\u043D\u0430\u044F"
+  biome: "\u0420\u0443\u0438\u043D\u044B / \u0433\u0440\u043E\u0437\u0430"
+  enemyDescription: "\u0420\u0430\u0437\u0440\u0443\u0448\u0435\u043D\u043D\u044B\u0439
+    \u0430\u0432\u0430\u043D\u043F\u043E\u0441\u0442 \u0441 \u043E\u0442\u043A\u0440\u044B\u0442\u044B\u043C\u0438
+    \u043F\u0440\u043E\u0445\u043E\u0434\u0430\u043C\u0438, \u0448\u0430\u043C\u0430\u043D\u0430\u043C\u0438
+    \u0438 \u044D\u043B\u0438\u0442\u043D\u044B\u043C\u0438 \u0432\u043E\u043B\u043D\u0430\u043C\u0438."
+  rewardsDescription: "\u0428\u0430\u043D\u0441 \u043C\u043E\u043B\u043D\u0438\u0435\u0432\u044B\u0445
+    \u043D\u0430\u0432\u044B\u043A\u043E\u0432 \u0438 \u043F\u043E\u0432\u044B\u0448\u0435\u043D\u043D\u044B\u0435
+    \u043D\u0430\u0433\u0440\u0430\u0434\u044B \u0437\u0430 \u0431\u043E\u0441\u0441\u043E\u0432."
+  previewImage: {fileID: 0}
+  recommendedLevel: 3
+  experienceMultiplier: 1.15
+  bossList: []
+  mapPrefab: {fileID: 6796770645764785893, guid: 588dda29e877f714588bcaeabc43972b, type: 3}
   spawnTimeline: {fileID: 11400000, guid: 87593cc0bd054c0d9e3ef8ac5b12c6dd, type: 2}
   enemyPool:
   - {fileID: 11400000, guid: c240558caf409854da37c3550c24c629, type: 2}
   - {fileID: 11400000, guid: 6b2e0fd3a4c14eb2a7d4f8c9513b6a20, type: 2}
   - {fileID: 11400000, guid: 2b75432f971f4ac8b6bde9d5b8e7e321, type: 2}
   - {fileID: 11400000, guid: a80c0a1fbddb4938a4f505fcd2ea7fa5, type: 2}
-  enemyHealthMultiplier: 1.2
-  enemyDamageMultiplier: 1.2
+  enemyHealthMultiplier: 1.12
+  enemyDamageMultiplier: 1.1
   spawnRateMultiplier: 1.15
   packSizeBonus: 1
   maxAliveBonus: 8
+  playerSpawnPosition: {x: 0, y: 1.08, z: -2}
+  playerSpawnClearRadius: 2
   overrideMapBounds: 1
   mapMin: {x: -20, y: -20}
   mapMax: {x: 20, y: 20}

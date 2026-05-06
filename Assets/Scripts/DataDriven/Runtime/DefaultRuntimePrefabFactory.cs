@@ -8,6 +8,11 @@ public static class DefaultRuntimePrefabFactory
     private static GameObject experienceGemPrefab;
     private static GameObject enemyProjectilePrefab;
     private static GameObject modularProjectilePrefab;
+    private static GameObject circularSweepHitboxPrefab;
+    private static GameObject delayedAreaStrikePrefab;
+    private static GameObject orbitalAttackPrefab;
+    private static GameObject summonPrefab;
+    private static GameObject beamVisualPrefab;
 
     public static void ResetCachedPrefabs()
     {
@@ -17,6 +22,11 @@ public static class DefaultRuntimePrefabFactory
         DestroyCachedPrefab(ref experienceGemPrefab);
         DestroyCachedPrefab(ref enemyProjectilePrefab);
         DestroyCachedPrefab(ref modularProjectilePrefab);
+        DestroyCachedPrefab(ref circularSweepHitboxPrefab);
+        DestroyCachedPrefab(ref delayedAreaStrikePrefab);
+        DestroyCachedPrefab(ref orbitalAttackPrefab);
+        DestroyCachedPrefab(ref summonPrefab);
+        DestroyCachedPrefab(ref beamVisualPrefab);
     }
 
     public static GameObject GetProjectilePrefab()
@@ -77,6 +87,56 @@ public static class DefaultRuntimePrefabFactory
         }
 
         return modularProjectilePrefab;
+    }
+
+    public static GameObject GetCircularSweepHitboxPrefab()
+    {
+        if (circularSweepHitboxPrefab == null)
+        {
+            circularSweepHitboxPrefab = CreateRuntimeBehaviourPrefab<RuntimeCircularSweepHitbox>("DefaultCircularSweepHitboxPrefab");
+        }
+
+        return circularSweepHitboxPrefab;
+    }
+
+    public static GameObject GetDelayedAreaStrikePrefab()
+    {
+        if (delayedAreaStrikePrefab == null)
+        {
+            delayedAreaStrikePrefab = CreateRuntimeBehaviourPrefab<RuntimeDelayedAreaStrike>("DefaultDelayedAreaStrikePrefab");
+        }
+
+        return delayedAreaStrikePrefab;
+    }
+
+    public static GameObject GetOrbitalAttackPrefab()
+    {
+        if (orbitalAttackPrefab == null)
+        {
+            orbitalAttackPrefab = CreateRuntimeBehaviourPrefab<RuntimeOrbitalAttack>("DefaultOrbitalAttackPrefab");
+        }
+
+        return orbitalAttackPrefab;
+    }
+
+    public static GameObject GetSummonPrefab()
+    {
+        if (summonPrefab == null)
+        {
+            summonPrefab = CreateSummonPrefab();
+        }
+
+        return summonPrefab;
+    }
+
+    public static GameObject GetBeamVisualPrefab()
+    {
+        if (beamVisualPrefab == null)
+        {
+            beamVisualPrefab = CreateBeamVisualPrefab();
+        }
+
+        return beamVisualPrefab;
     }
 
     private static GameObject CreateProjectilePrefab()
@@ -206,6 +266,54 @@ public static class DefaultRuntimePrefabFactory
         rendererComponent.material.color = new Color(0.9f, 0.9f, 1f);
 
         prefab.AddComponent<ModularProjectile>();
+        prefab.AddComponent<PoolableObject>();
+        prefab.SetActive(false);
+        prefab.hideFlags = HideFlags.HideAndDontSave;
+        return prefab;
+    }
+
+    private static GameObject CreateRuntimeBehaviourPrefab<T>(string prefabName) where T : Component
+    {
+        GameObject prefab = new(prefabName);
+        prefab.AddComponent<T>();
+        prefab.AddComponent<PoolableObject>();
+        prefab.SetActive(false);
+        prefab.hideFlags = HideFlags.HideAndDontSave;
+        return prefab;
+    }
+
+    private static GameObject CreateSummonPrefab()
+    {
+        GameObject prefab = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+        prefab.name = "DefaultSummonPrefab";
+        prefab.transform.localScale = new Vector3(0.65f, 1f, 0.65f);
+
+        Renderer rendererComponent = prefab.GetComponent<Renderer>();
+        rendererComponent.material.color = new Color(0.45f, 0.42f, 0.38f, 1f);
+
+        prefab.AddComponent<RuntimeSummonedMinion>();
+        prefab.AddComponent<PoolableObject>();
+        prefab.SetActive(false);
+        prefab.hideFlags = HideFlags.HideAndDontSave;
+        return prefab;
+    }
+
+    private static GameObject CreateBeamVisualPrefab()
+    {
+        GameObject prefab = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        prefab.name = "DefaultBeamVisualPrefab";
+
+        Collider collider = prefab.GetComponent<Collider>();
+
+        if (collider != null)
+        {
+            Object.DestroyImmediate(collider);
+        }
+
+        Renderer rendererComponent = prefab.GetComponent<Renderer>();
+        rendererComponent.material.color = new Color(0.7f, 0.85f, 1f, 0.75f);
+
+        prefab.AddComponent<RuntimeTimedDestroy>();
         prefab.AddComponent<PoolableObject>();
         prefab.SetActive(false);
         prefab.hideFlags = HideFlags.HideAndDontSave;

@@ -23,8 +23,8 @@ public class DelayedAreaAttackDeliveryDefinition : AttackDeliveryDefinition
             Vector3 position = targets[i].Position;
             position.y = warningHeight;
 
-            GameObject strikeObject = new("RuntimeDelayedAreaStrike");
-            RuntimeDelayedAreaStrike strike = strikeObject.AddComponent<RuntimeDelayedAreaStrike>();
+            GameObject strikeObject = PoolManager.Spawn(DefaultRuntimePrefabFactory.GetDelayedAreaStrikePrefab(), position, Quaternion.identity);
+            RuntimeDelayedAreaStrike strike = strikeObject.GetComponent<RuntimeDelayedAreaStrike>();
             strike.Initialize(position, resolvedRadius, delay, payload.Damage, statuses, context.SkillContext.SkillData.VisualPrefab);
         }
     }

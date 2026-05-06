@@ -6,6 +6,9 @@ public class CircularSweepAttackDeliveryDefinition : AttackDeliveryDefinition
 {
     [SerializeField] private float radius = 2.8f;
     [SerializeField] private float sweepDuration = 0.22f;
+    [Tooltip("Total angle covered by the swing. Use 360 for a full spin, 90-180 for a partial weapon arc.")]
+    [SerializeField] private float sweepAngle = 360f;
+    [Tooltip("Width of the active damage slice while the swing moves along the total angle.")]
     [SerializeField] private float arcWidth = 70f;
     [SerializeField] private bool clockwise = true;
 
@@ -16,12 +19,13 @@ public class CircularSweepAttackDeliveryDefinition : AttackDeliveryDefinition
             return;
         }
 
-        GameObject hitboxObject = new("CircularSweepHitbox");
-        RuntimeCircularSweepHitbox hitbox = hitboxObject.AddComponent<RuntimeCircularSweepHitbox>();
+        GameObject hitboxObject = PoolManager.Spawn(DefaultRuntimePrefabFactory.GetCircularSweepHitboxPrefab(), context.Owner.transform.position, Quaternion.identity);
+        RuntimeCircularSweepHitbox hitbox = hitboxObject.GetComponent<RuntimeCircularSweepHitbox>();
         hitbox.Initialize(
             context.Owner.transform,
             context.SkillContext.ResolveAreaRadius(radius),
             sweepDuration,
+            sweepAngle,
             arcWidth,
             clockwise,
             payload.Damage,

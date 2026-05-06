@@ -79,20 +79,20 @@ public class BeamAttackDeliveryDefinition : AttackDeliveryDefinition
 
     private void SpawnVisual(Vector3 origin, Vector3 direction, float resolvedLength, float resolvedWidth)
     {
-        GameObject visual = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        GameObject visual = PoolManager.Spawn(DefaultRuntimePrefabFactory.GetBeamVisualPrefab(), origin, Quaternion.identity);
         visual.name = "RuntimeBeamVisual";
         visual.transform.position = origin + direction * (resolvedLength * 0.5f) + Vector3.up * visualHeight;
         visual.transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
         visual.transform.localScale = new Vector3(resolvedWidth * 2f, 0.04f, resolvedLength);
 
-        Collider collider = visual.GetComponent<Collider>();
+        RuntimeTimedDestroy destroyer = visual.GetComponent<RuntimeTimedDestroy>();
 
-        if (collider != null)
+        if (destroyer == null)
         {
-            Object.Destroy(collider);
+            destroyer = visual.AddComponent<RuntimeTimedDestroy>();
+            PoolManager.MarkPoolableCacheDirty(visual);
         }
 
-        RuntimeTimedDestroy destroyer = visual.AddComponent<RuntimeTimedDestroy>();
         destroyer.Initialize(visualLifetime);
     }
 }

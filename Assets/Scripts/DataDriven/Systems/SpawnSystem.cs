@@ -33,18 +33,19 @@ public class SpawnSystem : MonoBehaviour
     private float elapsedTime;
     private int aliveEnemies;
     private int killCount;
+    private int eliteKillCount;
+    private int miniBossKillCount;
+    private int bossKillCount;
 
     private readonly List<EnemyData> eligibleEnemiesBuffer = new();
     private readonly List<Vector3> reservedSpawnPositionsBuffer = new();
     private readonly EnemySpawnSelector enemySpawnSelector = new();
+    private readonly MapBoundsResolver mapBoundsResolver = new();
+    private readonly RingSpawnPositionProvider spawnPositionProvider = new();
     private readonly HashSet<int> triggeredBurstEvents = new();
 
     private DataDrivenPlayerController playerController;
-    private Bounds groundBounds;
-    private bool hasGroundBounds;
-    private bool hasMapBoundsOverride;
-    private Vector2 mapBoundsOverrideMin;
-    private Vector2 mapBoundsOverrideMax;
+    private bool attemptedRunManagerResolve;
     private float mapEnemyHealthMultiplier = 1f;
     private float mapEnemyDamageMultiplier = 1f;
     private float mapSpawnRateMultiplier = 1f;
@@ -53,10 +54,20 @@ public class SpawnSystem : MonoBehaviour
 
     public event Action<int> KillCountChanged;
     public event Action<float> ElapsedTimeChanged;
+    public event Action<EnemyAgent> BossEnemySpawned;
+    public event Action<EnemyAgent> BossEnemyKilled;
+
+    private int activeBossCount;
+    private bool hadBossesSpawned;
 
     public int KillCount => killCount;
+    public int EliteKillCount => eliteKillCount;
+    public int MiniBossKillCount => miniBossKillCount;
+    public int BossKillCount => bossKillCount;
     public float ElapsedTime => elapsedTime;
     public float NormalizedTime => GetNormalizedTime();
+    public int ActiveBossCount => activeBossCount;
+    public bool HadBossesSpawned => hadBossesSpawned;
 
     public void ApplyMapData(MapData mapData)
     {
@@ -80,9 +91,7 @@ public class SpawnSystem : MonoBehaviour
         mapSpawnRateMultiplier = mapData.SpawnRateMultiplier;
         mapPackSizeBonus = mapData.PackSizeBonus;
         mapMaxAliveBonus = mapData.MaxAliveBonus;
-        hasMapBoundsOverride = mapData.OverrideMapBounds;
-        mapBoundsOverrideMin = mapData.MapMin;
-        mapBoundsOverrideMax = mapData.MapMax;
+        mapBoundsResolver.ApplyMapData(mapData);
 
         CacheGroundBounds();
     }
@@ -100,6 +109,11 @@ public class SpawnSystem : MonoBehaviour
         elapsedTime = 0f;
         aliveEnemies = 0;
         killCount = 0;
+        eliteKillCount = 0;
+        miniBossKillCount = 0;
+        bossKillCount = 0;
+        activeBossCount = 0;
+        hadBossesSpawned = false;
         triggeredBurstEvents.Clear();
         reservedSpawnPositionsBuffer.Clear();
 
@@ -152,6 +166,28 @@ public class SpawnSystem : MonoBehaviour
         aliveEnemies = Mathf.Max(0, aliveEnemies - 1);
         killCount++;
         KillCountChanged?.Invoke(killCount);
+
+        if (enemy != null && enemy.Data != null)
+        {
+            switch (enemy.Data.Category)
+            {
+                case EnemyCategory.Elite:
+                    eliteKillCount++;
+                    break;
+                case EnemyCategory.MiniBoss:
+                    miniBossKillCount++;
+                    break;
+                case EnemyCategory.Boss:
+                    bossKillCount++;
+                    break;
+            }
+        }
+
+        if (enemy != null && enemy.Data != null && IsBossCategory(enemy.Data.Category))
+        {
+            activeBossCount = Mathf.Max(0, activeBossCount - 1);
+            BossEnemyKilled?.Invoke(enemy);
+        }
     }
 
     public void SpawnSpecificEnemy(EnemyData enemyData)
@@ -179,13 +215,32 @@ public class SpawnSystem : MonoBehaviour
             spawnPosition);
     }
 
+    public void SpawnSpecificEnemy(EnemyData enemyData, Vector3 spawnCenter, float spawnRadius)
+    {
+        if (enemyData == null)
+        {
+            return;
+        }
+
+        int maxAlive = GetCurrentMaxAlive(GetNormalizedTime());
+
+        if (aliveEnemies >= maxAlive)
+        {
+            return;
+        }
+
+        Vector3 spawnPosition = FindSpawnPositionNear(spawnCenter, Mathf.Max(0.5f, spawnRadius));
+
+        SpawnEnemy(
+            enemyData,
+            GetCurrentHealthMultiplier(GetNormalizedTime()),
+            GetCurrentDamageMultiplier(GetNormalizedTime()),
+            spawnPosition);
+    }
+
     public Vector3 ClampToMap(Vector3 position)
     {
-        Vector2 min = GetMapMin();
-        Vector2 max = GetMapMax();
-        position.x = Mathf.Clamp(position.x, min.x, max.x);
-        position.z = Mathf.Clamp(position.z, min.y, max.y);
-        return position;
+        return mapBoundsResolver.Clamp(position);
     }
 
     public void SpawnExperienceGem(Vector3 position, int experienceValue)
@@ -206,6 +261,7 @@ public class SpawnSystem : MonoBehaviour
         if (gem == null)
         {
             gem = gemObject.AddComponent<ExperienceGem>();
+            PoolManager.MarkPoolableCacheDirty(gemObject);
         }
 
         float experienceMultiplier = runManager != null ? runManager.CurrentExperienceMultiplier : 1f;
@@ -312,159 +368,82 @@ public class SpawnSystem : MonoBehaviour
         if (agent == null)
         {
             agent = enemyObject.AddComponent<EnemyAgent>();
+            PoolManager.MarkPoolableCacheDirty(enemyObject);
         }
 
         agent.Initialize(enemyData, player, this, resolvedHealthMultiplier, resolvedDamageMultiplier);
         aliveEnemies++;
+
+        if (IsBossCategory(enemyData.Category))
+        {
+            activeBossCount++;
+            hadBossesSpawned = true;
+            BossEnemySpawned?.Invoke(agent);
+        }
     }
 
     private Vector3 FindSpawnPositionOnRing(EnemyData enemyData, List<Vector3> reservedPositions, bool safePadding)
     {
-        float radius = spawnTimeline != null ? spawnTimeline.SpawnDistance : fallbackSpawnRadius;
-        float directionBias = spawnTimeline != null ? spawnTimeline.PlayerDirectionBias : 0f;
-        Vector3 moveDirection = GetPlayerMoveDirection();
-        float baseAngle = GetBaseAngle(moveDirection, directionBias);
-        int samples = Mathf.Max(8, ringSampleCount);
-        float padding = safePadding
-            ? Mathf.Max(mapPadding, enemyData != null ? enemyData.VisualScaleMultiplier * 1.6f : mapPadding)
-            : mapPadding;
+        return spawnPositionProvider.FindSpawnPosition(
+            player.transform,
+            enemyData,
+            spawnTimeline,
+            fallbackSpawnRadius,
+            GetPlayerMoveDirection(),
+            reservedPositions,
+            safePadding,
+            mapBoundsResolver,
+            mapPadding,
+            minimumSpawnSeparation,
+            activeEnemySpawnSeparation,
+            ringSampleCount,
+            ringRadiusJitter);
+    }
 
-        int startIndex = UnityEngine.Random.Range(0, samples);
+    private Vector3 FindSpawnPositionNear(Vector3 center, float radius)
+    {
+        const int sampleCount = 12;
 
-        for (int i = 0; i < samples; i++)
+        Vector3 bestPosition = mapBoundsResolver.Clamp(center);
+        float bestScore = float.NegativeInfinity;
+
+        for (int i = 0; i < sampleCount; i++)
         {
-            int sampleIndex = (startIndex + i) % samples;
-            float angle = baseAngle + (sampleIndex / (float)samples) * Mathf.PI * 2f;
-            float jitterMultiplier = 1f + UnityEngine.Random.Range(-ringRadiusJitter, ringRadiusJitter);
-            Vector3 direction = new(Mathf.Cos(angle), 0f, Mathf.Sin(angle));
-            Vector3 candidate = player.transform.position + direction * radius * jitterMultiplier;
-            candidate.y = 0.5f;
+            float angle = (360f / sampleCount) * i + UnityEngine.Random.Range(-12f, 12f);
+            float distance = UnityEngine.Random.Range(radius * 0.35f, radius);
+            Vector3 offset = new Vector3(
+                Mathf.Cos(angle * Mathf.Deg2Rad),
+                0f,
+                Mathf.Sin(angle * Mathf.Deg2Rad)) * distance;
+            Vector3 candidate = mapBoundsResolver.Clamp(center + offset);
+            float score = ScoreLocalSpawnPosition(candidate);
 
-            if (IsValidSpawnPoint(candidate, reservedPositions, padding))
+            if (score > bestScore)
             {
-                return candidate;
+                bestScore = score;
+                bestPosition = candidate;
             }
         }
 
-        return GetFallbackSpawnPosition(reservedPositions, padding);
+        return bestPosition;
     }
 
-    private bool IsValidSpawnPoint(Vector3 candidate, List<Vector3> reservedPositions, float padding)
+    private float ScoreLocalSpawnPosition(Vector3 candidate)
     {
-        if (!IsInsideMap(candidate, padding))
-        {
-            return false;
-        }
-
-        if (!HasEnoughSeparation(candidate, reservedPositions))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    private Vector3 GetFallbackSpawnPosition(List<Vector3> reservedPositions, float padding)
-    {
-        Vector2 min = GetMapMin();
-        Vector2 max = GetMapMax();
-
-        for (int i = 0; i < 48; i++)
-        {
-            Vector3 candidate = new(
-                UnityEngine.Random.Range(min.x + padding, max.x - padding),
-                0.5f,
-                UnityEngine.Random.Range(min.y + padding, max.y - padding));
-
-            if (HasEnoughSeparation(candidate, reservedPositions))
-            {
-                return candidate;
-            }
-        }
-
-        return new Vector3(
-            Mathf.Clamp(player.transform.position.x, min.x + padding, max.x - padding),
-            0.5f,
-            Mathf.Clamp(player.transform.position.z, min.y + padding, max.y - padding));
-    }
-
-    private float GetBaseAngle(Vector3 moveDirection, float directionBias)
-    {
-        if (moveDirection.sqrMagnitude <= 0.001f || directionBias <= 0f)
-        {
-            return UnityEngine.Random.Range(0f, Mathf.PI * 2f);
-        }
-
-        Vector3 biasedDirection = Vector3.Slerp(Vector3.forward, moveDirection.normalized, directionBias).normalized;
-        return Mathf.Atan2(biasedDirection.z, biasedDirection.x);
-    }
-
-    private bool HasEnoughSeparation(Vector3 candidate, List<Vector3> reservedPositions)
-    {
-        if (reservedPositions != null && reservedPositions.Count > 0 && minimumSpawnSeparation > 0.01f)
-        {
-            float minimumDistanceSqr = minimumSpawnSeparation * minimumSpawnSeparation;
-
-            for (int i = 0; i < reservedPositions.Count; i++)
-            {
-                Vector3 delta = reservedPositions[i] - candidate;
-                delta.y = 0f;
-
-                if (delta.sqrMagnitude < minimumDistanceSqr)
-                {
-                    return false;
-                }
-            }
-        }
-
-        if (activeEnemySpawnSeparation > 0.01f && EnemyRegistry.HasEnemyWithinDistance(candidate, activeEnemySpawnSeparation))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    private bool IsInsideMap(Vector3 position, float padding)
-    {
-        Vector2 min = GetMapMin();
-        Vector2 max = GetMapMax();
-
-        return position.x >= min.x + padding &&
-               position.x <= max.x - padding &&
-               position.z >= min.y + padding &&
-               position.z <= max.y - padding;
+        return EnemyRegistry.HasEnemyWithinDistance(candidate, activeEnemySpawnSeparation) ? -100f : 0f;
     }
 
     private void CacheGroundBounds()
     {
+        mapBoundsResolver.ConfigureFallback(mapMin, mapMax);
+
         if (groundTransform == null)
         {
             GameObject groundObject = GameObject.Find("Ground");
             groundTransform = groundObject != null ? groundObject.transform : null;
         }
 
-        if (groundTransform == null)
-        {
-            hasGroundBounds = false;
-            return;
-        }
-
-        if (groundTransform.TryGetComponent(out Collider groundCollider))
-        {
-            groundBounds = groundCollider.bounds;
-            hasGroundBounds = true;
-            return;
-        }
-
-        if (groundTransform.TryGetComponent(out Renderer groundRenderer))
-        {
-            groundBounds = groundRenderer.bounds;
-            hasGroundBounds = true;
-            return;
-        }
-
-        hasGroundBounds = false;
+        mapBoundsResolver.CacheGroundBounds(groundTransform);
     }
 
     private void CachePlayerController()
@@ -477,9 +456,20 @@ public class SpawnSystem : MonoBehaviour
 
     private void CacheRunManager()
     {
-        if (runManager == null)
+        if (runManager != null || attemptedRunManagerResolve)
         {
-            runManager = FindFirstObjectByType<DDRunManager>();
+            return;
+        }
+
+        attemptedRunManagerResolve = true;
+        runManager = FindFirstObjectByType<DDRunManager>();
+    }
+
+    private void OnValidate()
+    {
+        if (runManager != null)
+        {
+            attemptedRunManagerResolve = true;
         }
     }
 
@@ -533,6 +523,11 @@ public class SpawnSystem : MonoBehaviour
         return baseValue * mapEnemyDamageMultiplier * (runManager != null ? runManager.CurrentEnemyDamageMultiplier : 1f);
     }
 
+    private static bool IsBossCategory(EnemyCategory category)
+    {
+        return category == EnemyCategory.Boss || category == EnemyCategory.MiniBoss;
+    }
+
     private Vector3 GetPlayerMoveDirection()
     {
         CachePlayerController();
@@ -547,27 +542,4 @@ public class SpawnSystem : MonoBehaviour
         return moveDirection.sqrMagnitude > 0.001f ? moveDirection.normalized : Vector3.zero;
     }
 
-    private Vector2 GetMapMin()
-    {
-        if (hasMapBoundsOverride)
-        {
-            return mapBoundsOverrideMin;
-        }
-
-        return hasGroundBounds
-            ? new Vector2(groundBounds.min.x, groundBounds.min.z)
-            : mapMin;
-    }
-
-    private Vector2 GetMapMax()
-    {
-        if (hasMapBoundsOverride)
-        {
-            return mapBoundsOverrideMax;
-        }
-
-        return hasGroundBounds
-            ? new Vector2(groundBounds.max.x, groundBounds.max.z)
-            : mapMax;
-    }
 }

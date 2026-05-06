@@ -18,8 +18,9 @@ public static class MedievalFantasyContentInstaller
     [MenuItem("Soulstone/Install Medieval Fantasy Roster")]
     public static void EnsureInstalled()
     {
-        if (SessionState.GetBool(InstalledThisSessionKey, false) && CoreAssetsExist())
+        if (CoreAssetsExist())
         {
+            SessionState.SetBool(InstalledThisSessionKey, true);
             return;
         }
 
@@ -128,7 +129,9 @@ public static class MedievalFantasyContentInstaller
             && AssetDatabase.LoadAssetAtPath<CharacterData>("Assets/Data/Characters/Hero_Necromancer.asset") != null
             && AssetDatabase.LoadAssetAtPath<CharacterData>("Assets/Data/Characters/Hero_Paladin.asset") != null
             && AssetDatabase.LoadAssetAtPath<CharacterData>("Assets/Data/Characters/Hero_RuneSmith.asset") != null
-            && AssetDatabase.LoadAssetAtPath<SkillData>("Assets/Data/Skills/Skill_FireRain.asset") != null;
+            && AssetDatabase.LoadAssetAtPath<SkillData>("Assets/Data/Skills/Skill_FireRain.asset") != null
+            && AssetDatabase.LoadAssetAtPath<SkillData>("Assets/Data/Skills/Skill_RaiseDead.asset") != null
+            && AssetDatabase.LoadAssetAtPath<CircularSweepAttackDeliveryDefinition>("Assets/Data/AttackModules/Delivery/Delivery_DoubleCleaveSector.asset") != null;
     }
 
     private static List<UpgradeData> CreateUpgrades(SkillData[] skills)

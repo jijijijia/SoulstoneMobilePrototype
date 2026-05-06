@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   characterId: rune_smith
   displayName: "\u0420\u0443\u043D\u043D\u044B\u0439 \u043A\u0443\u0437\u043D\u0435\u0446"
-  modelPrefab: {fileID: 0}
+  modelPrefab: {fileID: 2690207572220225819, guid: fbfcd876ad87c784db27d8a343bd0cb9, type: 3}
   baseStats:
   - statType: 0
     value: 135

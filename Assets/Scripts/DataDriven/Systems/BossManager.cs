@@ -9,6 +9,7 @@ public class BossManager : MonoBehaviour
 
     private int spawnedBosses;
     private int spawnedTimedBosses;
+    private bool attemptedFallbackResolve;
 
     private void OnEnable()
     {
@@ -38,7 +39,7 @@ public class BossManager : MonoBehaviour
     {
         if (spawnSystem == null)
         {
-            spawnSystem = FindFirstObjectByType<SpawnSystem>();
+            ResolveSpawnSystemOnce();
         }
 
         if (spawnSystem == null || timedBossEvents == null || timedBossEvents.Length == 0)
@@ -83,6 +84,23 @@ public class BossManager : MonoBehaviour
         EnemyData boss = bosses[Mathf.Min(spawnedBosses, bosses.Length - 1)];
         spawnSystem.SpawnSpecificEnemy(boss);
         spawnedBosses++;
+    }
+
+    private void ResolveSpawnSystemOnce()
+    {
+        if (attemptedFallbackResolve)
+        {
+            return;
+        }
+
+        attemptedFallbackResolve = true;
+        spawnSystem = FindFirstObjectByType<SpawnSystem>();
+
+        if (spawnSystem != null)
+        {
+            spawnSystem.KillCountChanged -= HandleKillCountChanged;
+            spawnSystem.KillCountChanged += HandleKillCountChanged;
+        }
     }
 }
 

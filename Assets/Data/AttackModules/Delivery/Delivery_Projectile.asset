@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84e855648c2fe5b4fbf0677a517ab5cc, type: 3}
   m_Name: Delivery_Projectile
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileAttackDeliveryDefinition
-  projectileSpeed: 13
-  projectileLifetime: 2.1
-  spawnHeight: 0.9
+  projectileSpeed: 15
+  projectileLifetime: 2.4
+  spawnHeight: 0.8
   pierceCount: 0
   ricochetCount: 0
   ricochetSearchRadius: 6
+  forkGenerations: 0
+  forkProjectileCount: 0
+  forkSpreadAngle: 35

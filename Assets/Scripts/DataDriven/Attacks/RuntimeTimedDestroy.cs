@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class RuntimeTimedDestroy : MonoBehaviour
+public class RuntimeTimedDestroy : MonoBehaviour, IPoolable
 {
     private float lifetime = 0.2f;
     private float timer;
@@ -17,7 +17,17 @@ public class RuntimeTimedDestroy : MonoBehaviour
 
         if (timer >= lifetime)
         {
-            Destroy(gameObject);
+            PoolManager.Release(gameObject);
         }
+    }
+
+    public void OnTakenFromPool()
+    {
+        timer = 0f;
+    }
+
+    public void OnReturnedToPool()
+    {
+        timer = 0f;
     }
 }

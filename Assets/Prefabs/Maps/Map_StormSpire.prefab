@@ -44,11 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93c9e38fd0b9473db5e095ae0bb87920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapRuntimeBuilder
+  buildPrototypeGeometryOnAwake: 1
   mapSize: {x: 44, y: 44}
   groundHeight: 0.2
   groundColor: {r: 0.32, g: 0.34, b: 0.43, a: 1}
   obstacleColor: {r: 0.42, g: 0.45, b: 0.56, a: 1}
-  clearLegacySceneMapObjects: 1
+  clearLegacySceneMapObjects: 0
   obstacles:
   - name: Storm_Pillar_A
     position: {x: -8, y: 3, z: 0}

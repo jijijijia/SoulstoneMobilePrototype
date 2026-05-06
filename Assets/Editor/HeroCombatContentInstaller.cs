@@ -19,8 +19,9 @@ public static class HeroCombatContentInstaller
     [MenuItem("Soulstone/Install Hero Combat Content Pack")]
     public static void EnsureInstalled()
     {
-        if (EditorPrefs.GetBool(InstalledPersistentlyKey, false) && CoreAssetsExist())
+        if (CoreAssetsExist())
         {
+            EditorPrefs.SetBool(InstalledPersistentlyKey, true);
             SessionState.SetBool(InstalledThisSessionKey, true);
             return;
         }
@@ -52,6 +53,12 @@ public static class HeroCombatContentInstaller
     [MenuItem("Soulstone/Reinstall Hero Combat Content Pack")]
     public static void Reinstall()
     {
+        if (CoreAssetsExist())
+        {
+            Debug.Log("Hero combat content already exists. Reinstall skipped to avoid overwriting edited content.");
+            return;
+        }
+
         Install();
         EditorPrefs.SetBool(InstalledPersistentlyKey, true);
         SessionState.SetBool(InstalledThisSessionKey, true);
@@ -150,7 +157,7 @@ public static class HeroCombatContentInstaller
             && AssetDatabase.LoadAssetAtPath<CharacterData>("Assets/Data/Characters/Hero_Assassin.asset") != null
             && AssetDatabase.LoadAssetAtPath<CharacterData>("Assets/Data/Characters/Hero_Knight.asset") != null
             && AssetDatabase.LoadAssetAtPath<SkillData>("Assets/Data/Skills/Skill_Armageddon.asset") != null
-            && AssetDatabase.LoadAssetAtPath<LineSlashAttackDeliveryDefinition>("Assets/Data/AttackModules/Delivery/Delivery_DoubleSlashLine.asset") != null;
+            && AssetDatabase.LoadAssetAtPath<CircularSweepAttackDeliveryDefinition>("Assets/Data/AttackModules/Delivery/Delivery_DoubleCleaveSector.asset") != null;
     }
 
     private static SkillData CreateSkill(SkillRuntimeDefinition runtime, string fileName, string id, string displayName, string description, SkillHitType hitType, SkillElement element, string[] tags, SkillCombatConfig combat, AttackDefinition attack)

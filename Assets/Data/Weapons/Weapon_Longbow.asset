@@ -15,6 +15,7 @@ MonoBehaviour:
   weaponId: longbow
   displayName: "\u0414\u043B\u0438\u043D\u043D\u044B\u0439 \u043B\u0443\u043A"
   icon: {fileID: 0}
+  visualPrefab: {fileID: 1939009496608716452, guid: 836505e1d17608c4dab39438db866e34, type: 3}
   startingSkill: {fileID: 11400000, guid: 111acc190413fd84aa19e165f10e3f67, type: 2}
   uniqueSkillPool:
   - {fileID: 11400000, guid: 111acc190413fd84aa19e165f10e3f67, type: 2}

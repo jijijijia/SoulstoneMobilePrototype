@@ -24,6 +24,12 @@ public class DDLevelUpManager : MonoBehaviour
     {
         ResolveReferences();
         SubscribeIfReady();
+
+        if (!subscribed)
+        {
+            Invoke(nameof(RetrySubscription), 0.1f);
+        }
+
         HidePanel();
     }
 
@@ -38,13 +44,10 @@ public class DDLevelUpManager : MonoBehaviour
         Unsubscribe();
     }
 
-    private void Update()
+    private void RetrySubscription()
     {
-        if (!subscribed)
-        {
-            ResolveReferences();
-            SubscribeIfReady();
-        }
+        ResolveReferences();
+        SubscribeIfReady();
     }
 
     public void SelectChoice(int index)
@@ -190,6 +193,8 @@ public class DDLevelUpManager : MonoBehaviour
                 continue;
             }
 
+            ConfigureLevelUpButtonStyle(optionButtons[i]);
+
             if (optionIcons != null && i < optionIcons.Length && optionIcons[i] != null)
             {
                 optionIcons[i].sprite = currentChoices[i].Icon;
@@ -222,6 +227,47 @@ public class DDLevelUpManager : MonoBehaviour
 
         levelUpPanel.SetActive(true);
         RefreshSwapButton();
+    }
+
+    private static void ConfigureLevelUpButtonStyle(Button button)
+    {
+        ColorBlock cb = button.colors;
+        cb.normalColor = new Color(0.17f, 0.18f, 0.21f, 0.96f);
+        cb.highlightedColor = new Color(0.28f, 0.24f, 0.12f, 1f);
+        cb.pressedColor = new Color(0.60f, 0.46f, 0.18f, 1f);
+        cb.selectedColor = cb.highlightedColor;
+        cb.colorMultiplier = 1f;
+        cb.fadeDuration = 0.08f;
+        button.colors = cb;
+        button.transition = Selectable.Transition.ColorTint;
+
+        Outline outline = button.GetComponent<Outline>();
+
+        if (outline != null)
+        {
+            outline.effectColor = new Color(0.86f, 0.68f, 0.32f, 0f);
+            outline.effectDistance = new Vector2(3f, -3f);
+        }
+        else
+        {
+            Debug.LogWarning($"Level-up option '{button.name}' is missing a scene-authored Outline component.", button);
+        }
+
+        if (button.GetComponent<ButtonPunchAnimation>() == null)
+        {
+            Debug.LogWarning($"Level-up option '{button.name}' is missing a scene-authored ButtonPunchAnimation component.", button);
+        }
+
+        LevelUpButtonHighlight highlight = button.GetComponent<LevelUpButtonHighlight>();
+
+        if (highlight != null)
+        {
+            highlight.SetOutline(outline);
+        }
+        else
+        {
+            Debug.LogWarning($"Level-up option '{button.name}' is missing a scene-authored LevelUpButtonHighlight component.", button);
+        }
     }
 
     private void RefreshSwapButton()

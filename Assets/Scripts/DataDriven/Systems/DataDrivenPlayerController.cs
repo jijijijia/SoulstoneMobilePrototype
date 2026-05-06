@@ -5,6 +5,7 @@ using UnityEngine;
 public class DataDrivenPlayerController : MonoBehaviour
 {
     [SerializeField] private Transform cameraTransform;
+    [SerializeField] private VirtualJoystick inputProviderObject;
     [SerializeField] private float gravity = -20f;
     [SerializeField] private KeyCode dashKey = KeyCode.Space;
     [SerializeField] private float dashSpeed = 18f;
@@ -15,6 +16,7 @@ public class DataDrivenPlayerController : MonoBehaviour
 
     private CharacterController characterController;
     private CharacterSystem characterSystem;
+    private IInputProvider inputProvider;
     private Vector3 velocity;
     private Vector3 lastMoveDirection;
     private Vector3 currentMoveDirection;
@@ -46,6 +48,7 @@ public class DataDrivenPlayerController : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         characterSystem = GetComponent<CharacterSystem>();
         currentDashCharges = MaxDashCharges;
+        inputProvider = inputProviderObject;
 
         if (cameraTransform == null && Camera.main != null)
         {
@@ -69,8 +72,21 @@ public class DataDrivenPlayerController : MonoBehaviour
 
     private void Move()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
+        float horizontal = 0f;
+        float vertical = 0f;
+
+        if (inputProvider != null)
+        {
+            Vector2 moveInput = inputProvider.MoveInput;
+            horizontal = moveInput.x;
+            vertical = moveInput.y;
+        }
+
+        if (horizontal == 0f && vertical == 0f)
+        {
+            horizontal = Input.GetAxisRaw("Horizontal");
+            vertical = Input.GetAxisRaw("Vertical");
+        }
 
         Vector3 inputDirection = new(horizontal, 0f, vertical);
         Vector3 moveDirection = inputDirection.normalized;
@@ -93,7 +109,9 @@ public class DataDrivenPlayerController : MonoBehaviour
         }
 
         float moveSpeed = characterSystem.RuntimeStats.GetValue(StatType.MoveSpeed);
-        characterController.Move(moveDirection * moveSpeed * Time.deltaTime);
+        Vector3 horizontalVelocity = moveDirection * moveSpeed;
+        characterController.Move(horizontalVelocity * Time.deltaTime);
+        characterSystem.SetVisualMoveVelocity(horizontalVelocity);
 
         if (characterController.isGrounded && velocity.y < 0f)
         {
@@ -106,7 +124,9 @@ public class DataDrivenPlayerController : MonoBehaviour
 
     private void TryStartDash()
     {
-        if (!Input.GetKeyDown(dashKey) || currentDashCharges <= 0)
+        bool dashDown = (inputProvider != null && inputProvider.DashPressed) || Input.GetKeyDown(dashKey);
+
+        if (!dashDown || currentDashCharges <= 0)
         {
             return;
         }
@@ -127,6 +147,7 @@ public class DataDrivenPlayerController : MonoBehaviour
         lastMoveDirection = dashDirection.normalized;
         transform.forward = lastMoveDirection;
         characterSystem.TriggerInvulnerability(dashInvulnerabilityDuration);
+        characterSystem.PlayDashVisual(dashDuration);
     }
 
     private void UpdateDash()
@@ -138,7 +159,9 @@ public class DataDrivenPlayerController : MonoBehaviour
         }
 
         dashTimeRemaining -= Time.deltaTime;
-        characterController.Move(lastMoveDirection * dashSpeed * Time.deltaTime);
+        Vector3 dashVelocity = lastMoveDirection * dashSpeed;
+        characterController.Move(dashVelocity * Time.deltaTime);
+        characterSystem.SetVisualMoveVelocity(dashVelocity);
 
         if (characterController.isGrounded && velocity.y < 0f)
         {

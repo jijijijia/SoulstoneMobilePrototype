@@ -15,9 +15,24 @@ public class StatusController : MonoBehaviour
         public float TickTimer;
     }
 
+    private static readonly Dictionary<StatusEffectType, string> StatusSourceIds = new()
+    {
+        { StatusEffectType.Poison,    "status::Poison"    },
+        { StatusEffectType.Burn,      "status::Burn"      },
+        { StatusEffectType.Slow,      "status::Slow"      },
+        { StatusEffectType.Weakness,  "status::Weakness"  },
+        { StatusEffectType.Bleed,     "status::Bleed"     },
+        { StatusEffectType.Doom,      "status::Doom"      },
+        { StatusEffectType.Shattered, "status::Shattered" },
+        { StatusEffectType.Dazed,     "status::Dazed"     },
+        { StatusEffectType.Brittle,   "status::Brittle"   },
+        { StatusEffectType.Fragility, "status::Fragility" },
+    };
+
     private readonly Dictionary<StatusEffectType, StatusRuntime> activeStatuses = new();
     private readonly List<StatusEffectType> updateKeysBuffer = new();
     private readonly List<StatusEffectType> removalBuffer = new();
+    private readonly List<StatModifierData> modifierBuffer = new();
 
     private CharacterSystem characterOwner;
     private EnemyAgent enemyOwner;
@@ -214,7 +229,7 @@ public class StatusController : MonoBehaviour
             return;
         }
 
-        List<StatModifierData> modifiers = new();
+        modifierBuffer.Clear();
 
         if (activeStatuses.TryGetValue(effectType, out StatusRuntime status))
         {
@@ -223,7 +238,7 @@ public class StatusController : MonoBehaviour
             switch (effectType)
             {
                 case StatusEffectType.Slow:
-                    modifiers.Add(new StatModifierData
+                    modifierBuffer.Add(new StatModifierData
                     {
                         statType = StatType.MoveSpeed,
                         additive = 0f,
@@ -233,13 +248,13 @@ public class StatusController : MonoBehaviour
 
                 case StatusEffectType.Weakness:
                     float clampedWeakness = -Mathf.Clamp(totalPotency, 0f, 0.85f);
-                    modifiers.Add(new StatModifierData
+                    modifierBuffer.Add(new StatModifierData
                     {
                         statType = StatType.Damage,
                         additive = 0f,
                         multiplier = clampedWeakness
                     });
-                    modifiers.Add(new StatModifierData
+                    modifierBuffer.Add(new StatModifierData
                     {
                         statType = StatType.ContactDamage,
                         additive = 0f,
@@ -248,7 +263,7 @@ public class StatusController : MonoBehaviour
                     break;
 
                 case StatusEffectType.Shattered:
-                    modifiers.Add(new StatModifierData
+                    modifierBuffer.Add(new StatModifierData
                     {
                         statType = StatType.Armor,
                         additive = -Mathf.Clamp(totalPotency, 0f, 95f),
@@ -257,7 +272,7 @@ public class StatusController : MonoBehaviour
                     break;
 
                 case StatusEffectType.Dazed:
-                    modifiers.Add(new StatModifierData
+                    modifierBuffer.Add(new StatModifierData
                     {
                         statType = StatType.CritChance,
                         additive = Mathf.Clamp(totalPotency, 0f, 1f),
@@ -266,7 +281,7 @@ public class StatusController : MonoBehaviour
                     break;
 
                 case StatusEffectType.Brittle:
-                    modifiers.Add(new StatModifierData
+                    modifierBuffer.Add(new StatModifierData
                     {
                         statType = StatType.Armor,
                         additive = -Mathf.Clamp(totalPotency * 0.5f, 0f, 75f),
@@ -275,7 +290,7 @@ public class StatusController : MonoBehaviour
                     break;
 
                 case StatusEffectType.Fragility:
-                    modifiers.Add(new StatModifierData
+                    modifierBuffer.Add(new StatModifierData
                     {
                         statType = StatType.Damage,
                         additive = 0f,
@@ -287,13 +302,13 @@ public class StatusController : MonoBehaviour
 
         string sourceId = GetStatusSourceId(effectType);
 
-        if (modifiers.Count == 0)
+        if (modifierBuffer.Count == 0)
         {
             runtimeStats.RemoveModifiers(sourceId);
         }
         else
         {
-            runtimeStats.AddModifiers(sourceId, modifiers);
+            runtimeStats.AddModifiers(sourceId, modifierBuffer);
         }
     }
 
@@ -313,6 +328,6 @@ public class StatusController : MonoBehaviour
 
     private static string GetStatusSourceId(StatusEffectType effectType)
     {
-        return $"status::{effectType}";
+        return StatusSourceIds.TryGetValue(effectType, out string id) ? id : effectType.ToString();
     }
 }

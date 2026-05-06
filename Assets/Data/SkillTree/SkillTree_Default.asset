@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d17b4ed9d2d44ab4db71a95882557f4a, type: 3}
+  m_Name: SkillTree_Default
+  m_EditorClassIdentifier: Assembly-CSharp::SkillTreeData
+  nodes:
+  - {fileID: 11400000, guid: 0b65aa8e1b5bd7c4382752de22ad03ad, type: 2}
+  - {fileID: 11400000, guid: 8190875a9ae87bd4aa41b3281d12887c, type: 2}
+  - {fileID: 11400000, guid: d841a8a3823e801429e7845c88065be7, type: 2}
+  - {fileID: 11400000, guid: 2d962284f666ec84f9a0bda0fa7d164d, type: 2}
+  - {fileID: 11400000, guid: 7cae1489176392d4e8c11f81cb9afdd7, type: 2}
+  - {fileID: 11400000, guid: 509f3792c39f40f4b99e3c37e98c636d, type: 2}
+  - {fileID: 11400000, guid: 737eadf8b1fe7c5498177663581b1455, type: 2}
+  startingAvailableNodeIds:
+  - node_vitality

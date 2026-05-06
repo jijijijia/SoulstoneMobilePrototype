@@ -229,16 +229,19 @@ flowchart TD
 - `FrontalConeAttackDeliveryDefinition` — секторный удар перед героем.
 - `LineSlashAttackDeliveryDefinition` — вытянутая зона удара.
 - `CircularMeleeAttackDeliveryDefinition` — мгновенный круговой удар вокруг героя.
-- `CircularSweepAttackDeliveryDefinition` — круговой удар по дуге, имитирующий вращение оружия.
+- `CircularSweepAttackDeliveryDefinition` — удар по настраиваемой дуге; `Sweep Angle = 360` даёт полный круг, 90-180 даёт частичный взмах.
 - `BeamAttackDeliveryDefinition` — луч или линия урона.
 - `OrbitalAttackDeliveryDefinition` — объект, вращающийся вокруг игрока.
 - `SummonAttackDeliveryDefinition` — призыв союзника с базовым ИИ.
 
-`ModularProjectile` поддерживает пробивание и рикошеты:
+`ModularProjectile` поддерживает пробивание, рикошеты и разветвление:
 
 - `Pierce Count` — сколько врагов снаряд может пробить.
 - `Ricochet Count` — сколько раз снаряд может перескочить на новую цель.
 - `Ricochet Search Radius` — радиус поиска цели для рикошета.
+- `Fork Generations` — сколько раз снаряд может разделиться после попадания.
+- `Fork Projectile Count` — сколько дочерних снарядов создаётся при разделении.
+- `Fork Spread Angle` — общий угол разлёта дочерних снарядов.
 
 ## Актуальное Состояние Level Up
 

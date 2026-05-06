@@ -12,24 +12,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b9f5c75cf4e4d2b947394c5c92a7a64, type: 3}
   m_Name: Map_AshenQuarry
   m_EditorClassIdentifier: Assembly-CSharp::MapData
-  mapId: ashen_quarry
-  displayName: "\u041F\u0435\u043F\u0435\u043B\u044C\u043D\u044B\u0439 \u043A\u0430\u0440\u044C\u0435\u0440"
-  difficulty: "\u0421\u0440\u0435\u0434\u043D\u044F\u044F"
-  biome: "\u041A\u0430\u043C\u0435\u043D\u044C \u0438 \u043F\u0435\u043F\u0435\u043B"
-  enemyDescription: "\u041F\u043B\u043E\u0442\u043D\u044B\u0435 \u0442\u0430\u043D\u043A\u0438, \u044D\u043B\u0438\u0442\u044B \u0438 \u043C\u0438\u043D\u0438-\u0431\u043E\u0441\u0441\u044B."
-  rewardsDescription: "\u041A\u0430\u043C\u043D\u0438 \u0443\u043B\u0443\u0447\u0448\u0435\u043D\u0438\u0439, \u0440\u0435\u0434\u043A\u0438\u0435 \u043F\u0430\u0441\u0441\u0438\u0432\u043A\u0438."
-  mapPrefab: {fileID: 100000, guid: 957a4f185c8d4ad1923d94e88d234c54, type: 3}
+  mapId: ember_vault
+  displayName: "\u041F\u044B\u043B\u0430\u044E\u0449\u0435\u0435 \u0425\u0440\u0430\u043D\u0438\u043B\u0438\u0449\u0435"
+  difficulty: "\u0421\u0440\u0435\u0434\u043D\u044F\u044F+"
+  biome: "\u041A\u0443\u0437\u043D\u044F / \u043A\u0430\u043C\u0435\u043D\u044C /
+    \u043E\u0433\u043E\u043D\u044C"
+  enemyDescription: "\u0410\u0440\u0435\u043D\u0430 \u0441 \u0436\u0430\u0440\u043E\u0432\u044B\u043C\u0438
+    \u0440\u0430\u0437\u043B\u043E\u043C\u0430\u043C\u0438, \u0431\u044B\u0441\u0442\u0440\u044B\u043C\u0438
+    \u0432\u0440\u0430\u0433\u0430\u043C\u0438 \u0438 \u0442\u044F\u0436\u0451\u043B\u044B\u043C\u0438
+    \u0441\u0442\u0440\u0430\u0436\u0430\u043C\u0438."
+  rewardsDescription: "\u0411\u043E\u043B\u044C\u0448\u0435 \u0437\u043E\u043B\u043E\u0442\u0430
+    \u0438 \u0448\u0430\u043D\u0441 \u043E\u0433\u043D\u0435\u043D\u043D\u044B\u0445
+    \u0443\u043B\u0443\u0447\u0448\u0435\u043D\u0438\u0439."
+  previewImage: {fileID: 0}
+  recommendedLevel: 2
+  experienceMultiplier: 1.05
+  bossList: []
+  mapPrefab: {fileID: 3324501267983708394, guid: dc2c6b4732815b84995ae7bd4550264e, type: 3}
   spawnTimeline: {fileID: 11400000, guid: 87593cc0bd054c0d9e3ef8ac5b12c6dd, type: 2}
   enemyPool:
   - {fileID: 11400000, guid: eb3451b142190f948a974a32ff0232f4, type: 2}
   - {fileID: 11400000, guid: b04a76f01ef2e28448bf8a6252c0f9da, type: 2}
   - {fileID: 11400000, guid: 2b75432f971f4ac8b6bde9d5b8e7e321, type: 2}
   - {fileID: 11400000, guid: a80c0a1fbddb4938a4f505fcd2ea7fa5, type: 2}
-  enemyHealthMultiplier: 1.15
+  enemyHealthMultiplier: 1.08
   enemyDamageMultiplier: 1.05
   spawnRateMultiplier: 0.95
   packSizeBonus: 0
   maxAliveBonus: 4
+  playerSpawnPosition: {x: 0, y: 1.08, z: 0}
+  playerSpawnClearRadius: 2
   overrideMapBounds: 1
   mapMin: {x: -20, y: -20}
   mapMax: {x: 20, y: 20}

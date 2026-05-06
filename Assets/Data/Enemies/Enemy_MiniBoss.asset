@@ -15,19 +15,30 @@ MonoBehaviour:
   enemyId: enemy_miniboss
   displayName: Mini Boss
   category: 3
-  prefab: {fileID: 2151357740369669093, guid: 52422012291d0a24581056854e92dd5f, type: 3}
+  prefab: {fileID: 7898921813124351469, guid: ae4049b8ce61f68408d7b23daa88efa9, type: 3}
   attackSkill: {fileID: 0}
+  abilityConfig: {fileID: 11400000, guid: 5bf537fb03c5481d996d45a43f4bdd46, type: 2}
+  attackType: 0
   baseStats:
   - statType: 0
-    value: 650
+    value: 900
   - statType: 1
-    value: 2.75
+    value: 2.6
   - statType: 9
-    value: 26
-  spawnCost: 6
-  spawnWeight: 0.01
+    value: 34
+  - statType: 24
+    value: 150
+  spawnCost: 8
+  spawnWeight: 0.008
   unlockPlayerLevel: 1
   killRequirement: 0
-  experienceReward: 25
+  experienceReward: 35
   visualScaleMultiplier: 2.2
   tintColor: {r: 0.72, g: 0.18, b: 0.12, a: 1}
+  preferredDistance: 1.4
+  attackInterval: 1
+  projectileSpeed: 10
+  projectileLifetime: 4
+  projectileScale: 0.4
+  projectileColor: {r: 0, g: 1, b: 0, a: 1}
+  attackStatuses: []

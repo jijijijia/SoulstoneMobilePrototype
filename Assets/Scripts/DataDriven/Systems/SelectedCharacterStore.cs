@@ -3,6 +3,7 @@ using UnityEngine;
 public static class SelectedCharacterStore
 {
     private const string SelectedCharacterIdKey = "soulstone.selected_character_id";
+    private const string ProfileSelectedCharacterIdKey = "selected_character_id";
     private const string DefaultRosterResourcePath = "CharacterRoster";
 
     private static CharacterRoster cachedRoster;
@@ -19,7 +20,15 @@ public static class SelectedCharacterStore
 
     public static string GetSelectedCharacterId()
     {
-        return PlayerPrefs.GetString(SelectedCharacterIdKey, string.Empty);
+        PlayerProfileData profile = SaveSystem.CurrentProfile;
+
+        if (profile != null && !string.IsNullOrWhiteSpace(profile.selectedCharacterId))
+        {
+            return profile.selectedCharacterId;
+        }
+
+        string profileKey = GameProfileStore.GetProfileKey(ProfileSelectedCharacterIdKey);
+        return PlayerPrefs.GetString(profileKey, PlayerPrefs.GetString(SelectedCharacterIdKey, string.Empty));
     }
 
     public static void SetSelectedCharacter(CharacterData characterData)
@@ -29,7 +38,8 @@ public static class SelectedCharacterStore
             return;
         }
 
-        PlayerPrefs.SetString(SelectedCharacterIdKey, characterData.CharacterId);
+        SaveSystem.SetSelectedCharacter(characterData.CharacterId);
+        PlayerPrefs.SetString(GameProfileStore.GetProfileKey(ProfileSelectedCharacterIdKey), characterData.CharacterId);
         PlayerPrefs.Save();
     }
 

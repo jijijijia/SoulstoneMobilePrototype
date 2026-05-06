@@ -9,6 +9,19 @@ public static class SkillFactory
             return null;
         }
 
+        if (skillData.AttackDefinitions != null && skillData.AttackDefinitions.Length > 0)
+        {
+            ModularAttackSkill modularSkill = owner.gameObject.AddComponent<ModularAttackSkill>();
+            modularSkill.Initialize(new SkillRuntimeContext
+            {
+                Owner = owner,
+                SkillData = skillData,
+                OwnerStats = owner.RuntimeStats,
+                UpgradeSystem = owner.UpgradeSystem
+            }, rank);
+            return modularSkill;
+        }
+
         if (skillData.RuntimeDefinition == null)
         {
             Debug.LogError($"Skill '{skillData.name}' does not have a Runtime Definition assigned.");

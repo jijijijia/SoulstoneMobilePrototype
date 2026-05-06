@@ -15,6 +15,7 @@ MonoBehaviour:
   weaponId: viking_axe
   displayName: "\u0421\u0435\u043A\u0438\u0440\u0430 \u0432\u0438\u043A\u0438\u043D\u0433\u0430"
   icon: {fileID: 0}
+  visualPrefab: {fileID: 6523295853284413167, guid: 635381fe643f22443b7747b02e6c6f66, type: 3}
   startingSkill: {fileID: 11400000, guid: 33fa0ceb8a91ecc439967894c8a7e6d3, type: 2}
   uniqueSkillPool:
   - {fileID: 11400000, guid: 33fa0ceb8a91ecc439967894c8a7e6d3, type: 2}

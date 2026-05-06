@@ -52,4 +52,9 @@ public abstract class SkillBehaviourBase : MonoBehaviour
     }
 
     protected abstract void ApplyRank();
+
+    protected void PlayOwnerAttackVisual()
+    {
+        Context?.Owner?.PlayAttackVisual();
+    }
 }

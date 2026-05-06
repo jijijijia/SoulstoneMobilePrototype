@@ -15,16 +15,19 @@ MonoBehaviour:
   enemyId: enemy_frost_shaman
   displayName: Frost Shaman
   category: 0
-  prefab: {fileID: 2151357740369669093, guid: 1d02c4f417f5d2f4689557e64a4b40c3, type: 3}
+  prefab: {fileID: 8423090016463179157, guid: 2e090a5e7f6063c47abea840068a945d, type: 3}
   attackSkill: {fileID: 0}
+  abilityConfig: {fileID: 11400000, guid: 52e1790b6d7542809faa987cf7a79149, type: 2}
   attackType: 1
   baseStats:
   - statType: 0
-    value: 58
+    value: 65
   - statType: 1
-    value: 2.9
+    value: 2.8
   - statType: 9
     value: 9
+  - statType: 24
+    value: 105
   spawnCost: 2
   spawnWeight: 0.45
   unlockPlayerLevel: 1
@@ -33,7 +36,7 @@ MonoBehaviour:
   visualScaleMultiplier: 1.08
   tintColor: {r: 0.45, g: 0.8, b: 1, a: 1}
   preferredDistance: 8.5
-  attackInterval: 1.95
+  attackInterval: 2.05
   projectileSpeed: 10
   projectileLifetime: 5.5
   projectileScale: 0.46

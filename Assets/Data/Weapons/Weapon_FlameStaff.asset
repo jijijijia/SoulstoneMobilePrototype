@@ -15,11 +15,10 @@ MonoBehaviour:
   weaponId: flame_staff
   displayName: "\u041F\u043B\u0430\u043C\u0435\u043D\u043D\u044B\u0439 \u043F\u043E\u0441\u043E\u0445"
   icon: {fileID: 0}
+  visualPrefab: {fileID: 7630173950005585897, guid: 9493b64a78ee9cf4a84dd7782868778b, type: 3}
   startingSkill: {fileID: 11400000, guid: ef9fc16d7ce024c46b76d0f267ab045c, type: 2}
   uniqueSkillPool:
   - {fileID: 11400000, guid: ef9fc16d7ce024c46b76d0f267ab045c, type: 2}
   - {fileID: 11400000, guid: 46015dc9ddc71e04b82d620126c69db4, type: 2}
   - {fileID: 11400000, guid: 3ae3d869001bd264f9b43e3fc5aa1ffa, type: 2}
-  - {fileID: 11400000, guid: 45646d1f041612746975235c3e8847a1, type: 2}
-  - {fileID: 11400000, guid: ef9fc16d7ce024c46b76d0f267ab045c, type: 2}
   - {fileID: 11400000, guid: 02b26f14e0e19324698a90a526991020, type: 2}

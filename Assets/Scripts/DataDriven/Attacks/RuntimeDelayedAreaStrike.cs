@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RuntimeDelayedAreaStrike : MonoBehaviour
+public class RuntimeDelayedAreaStrike : MonoBehaviour, IPoolable
 {
     private readonly List<EnemyAgent> enemies = new();
 
@@ -59,9 +59,10 @@ public class RuntimeDelayedAreaStrike : MonoBehaviour
         if (warningVisual != null)
         {
             PoolManager.Release(warningVisual);
+            warningVisual = null;
         }
 
-        Destroy(gameObject);
+        PoolManager.Release(gameObject);
     }
 
     private void ApplyStrike()
@@ -84,5 +85,27 @@ public class RuntimeDelayedAreaStrike : MonoBehaviour
 
             enemy.ApplyStatuses(statuses);
         }
+    }
+
+    public void OnTakenFromPool()
+    {
+        warningVisual = null;
+        statuses = null;
+        timer = 0f;
+        resolved = false;
+    }
+
+    public void OnReturnedToPool()
+    {
+        if (warningVisual != null)
+        {
+            PoolManager.Release(warningVisual);
+        }
+
+        warningVisual = null;
+        statuses = null;
+        enemies.Clear();
+        timer = 0f;
+        resolved = false;
     }
 }

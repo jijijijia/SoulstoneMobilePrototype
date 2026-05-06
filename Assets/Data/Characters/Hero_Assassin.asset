@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Hero_Assassin
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   characterId: shadow_blade
-  displayName: "\u0422\u0435\u043D\u0435\u0432\u043E\u0439 \u043A\u043B\u0438\u043D\u043E\u043A"
-  modelPrefab: {fileID: 0}
+  displayName: "\u042D\u0439\u0440\u0430"
+  modelPrefab: {fileID: 5373581903071474895, guid: e68788dd24aa2ad4aba6e56d9258af2b, type: 3}
   baseStats:
   - statType: 0
     value: 90
@@ -37,7 +37,18 @@ MonoBehaviour:
   startingWeapon: {fileID: 11400000, guid: 2dec47cf75bb567458de785f80a85eaa, type: 2}
   availableWeapons:
   - {fileID: 11400000, guid: 2dec47cf75bb567458de785f80a85eaa, type: 2}
+  - {fileID: 11400000, guid: b2a3b3642fcad9440bcb428b8cb0ef40, type: 2}
+  - {fileID: 11400000, guid: 4e5c4ae0e1db53b479359da7f42a1b10, type: 2}
   globalUpgradePool:
+  - {fileID: 11400000, guid: 4ae58365f9cb4ba4f89d2e47569e4b71, type: 2}
+  - {fileID: 11400000, guid: 0102f5617e9df374688e15b4afbc8b4e, type: 2}
+  - {fileID: 11400000, guid: 06d50997c3192794d8d19cb8f48bc74b, type: 2}
+  - {fileID: 11400000, guid: 57222ac25ff547e8b3b92feab7e3b5a0, type: 2}
+  - {fileID: 11400000, guid: 6ba8299b00de4808b6fece12d616665c, type: 2}
+  - {fileID: 11400000, guid: 9d64f0ece2d7440bb5a0b7478f58787d, type: 2}
+  - {fileID: 11400000, guid: 27c6b1dcaefb8eb468bb95e9df433d9a, type: 2}
+  - {fileID: 11400000, guid: 8fd9ba00cf16c864f8db30c5f52b01ed, type: 2}
+  - {fileID: 11400000, guid: d620ea04be4540df843efe49d2e6e44c, type: 2}
   - {fileID: 11400000, guid: 0102f5617e9df374688e15b4afbc8b4e, type: 2}
   - {fileID: 11400000, guid: e3ad1d6214e02924b98f94e956312826, type: 2}
   - {fileID: 11400000, guid: 4ae58365f9cb4ba4f89d2e47569e4b71, type: 2}

@@ -15,6 +15,8 @@ public class CharacterSystem : MonoBehaviour
     private ProgressionChoiceGenerator progressionChoiceGenerator;
     private StatusController statusController;
     private GameObject instantiatedModel;
+    private CombatVisualAnimator combatVisualAnimator;
+    private CharacterWeaponVisualAttacher weaponVisualAttacher;
     private readonly CharacterRuntimeState runtimeState = new();
     private float invulnerabilityTimer;
 
@@ -83,6 +85,7 @@ public class CharacterSystem : MonoBehaviour
         runtimeStats = new RuntimeStats();
         runtimeStats.Initialize(characterData.BaseStats);
         runtimeStats.StatsChanged += HandleStatsChanged;
+        SkillTreeSystem.ApplyGlobalBonuses(runtimeStats);
 
         EnsureModel();
         statusController.Initialize(this, runtimeStats);
@@ -98,6 +101,7 @@ public class CharacterSystem : MonoBehaviour
         if (selectedWeapon != null)
         {
             weaponSystem.Equip(selectedWeapon);
+            AttachWeaponVisual(selectedWeapon);
         }
 
         runtimeState.Reset(runtimeStats.GetValue(StatType.MaxHealth));
@@ -118,6 +122,11 @@ public class CharacterSystem : MonoBehaviour
         float resolvedDamage = ResolveIncomingDamage(damage);
         int availableTotems = Mathf.Max(0, Mathf.FloorToInt(runtimeStats.GetValue(StatType.LifeTotemCount)));
         runtimeState.ApplyDamage(resolvedDamage, availableTotems, 0.5f);
+        CombatFeedbackEvents.RaiseDamageTaken(new CombatFeedbackEvent(
+            transform,
+            transform.position,
+            resolvedDamage,
+            isPlayerTarget: true));
     }
 
     public void RestoreHealth(float amount)
@@ -130,6 +139,24 @@ public class CharacterSystem : MonoBehaviour
         invulnerabilityTimer = Mathf.Max(invulnerabilityTimer, duration);
     }
 
+    public void SetVisualMoveVelocity(Vector3 velocity)
+    {
+        EnsureVisualControllers();
+        combatVisualAnimator?.SetMoveVelocity(velocity);
+    }
+
+    public void PlayAttackVisual()
+    {
+        EnsureVisualControllers();
+        combatVisualAnimator?.PlayAttack();
+    }
+
+    public void PlayDashVisual(float duration)
+    {
+        EnsureVisualControllers();
+        combatVisualAnimator?.PlayDash(duration);
+    }
+
     public float GetSkillAttackPower()
     {
         return runtimeStats != null ? runtimeStats.GetValue(StatType.AttackPower) : 1f;
@@ -137,6 +164,8 @@ public class CharacterSystem : MonoBehaviour
 
     private void EnsureModel()
     {
+        RemoveLegacyCapsuleVisuals();
+
         if (characterData.ModelPrefab == null)
         {
             return;
@@ -150,6 +179,70 @@ public class CharacterSystem : MonoBehaviour
 
         instantiatedModel = Instantiate(characterData.ModelPrefab, transform);
         instantiatedModel.name = $"{characterData.DisplayName}_Model";
+        instantiatedModel.transform.localPosition = Vector3.zero;
+        instantiatedModel.transform.localRotation = Quaternion.identity;
+        instantiatedModel.transform.localScale = Vector3.one;
+
+        EnsureVisualControllers();
+        combatVisualAnimator.ConfigureVisualRoot(instantiatedModel.transform);
+    }
+
+    private void AttachWeaponVisual(WeaponData weaponData)
+    {
+        EnsureVisualControllers();
+        weaponVisualAttacher?.AttachWeapon(weaponData);
+    }
+
+    private void EnsureVisualControllers()
+    {
+        if (combatVisualAnimator == null)
+        {
+            combatVisualAnimator = GetComponent<CombatVisualAnimator>();
+        }
+
+        if (combatVisualAnimator == null)
+        {
+            combatVisualAnimator = gameObject.AddComponent<CombatVisualAnimator>();
+        }
+
+        if (weaponVisualAttacher == null)
+        {
+            weaponVisualAttacher = GetComponent<CharacterWeaponVisualAttacher>();
+        }
+
+        if (weaponVisualAttacher == null)
+        {
+            weaponVisualAttacher = gameObject.AddComponent<CharacterWeaponVisualAttacher>();
+        }
+    }
+
+    private void RemoveLegacyCapsuleVisuals()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Transform child = transform.GetChild(i);
+
+            if (child == null || child == instantiatedModel?.transform)
+            {
+                continue;
+            }
+
+            bool isLegacyCapsule = string.Equals(child.name, "Capsule", StringComparison.OrdinalIgnoreCase);
+
+            if (!isLegacyCapsule)
+            {
+                continue;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(child.gameObject);
+            }
+            else
+            {
+                DestroyImmediate(child.gameObject);
+            }
+        }
     }
 
     private void EnsureSubsystems()

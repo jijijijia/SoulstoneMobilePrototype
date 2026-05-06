@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class SkillSystem : MonoBehaviour
@@ -14,7 +13,7 @@ public class SkillSystem : MonoBehaviour
     public event System.Action ActiveSkillsChanged;
 
     public IReadOnlyList<SkillInstance> ActiveSkills => activeSkills;
-    public int MaxSkills => MaxActiveSkills;
+    public int MaxSkills => MaxActiveSkills + SkillTreeSystem.GetActiveSkillSlotBonus();
 
     public void Initialize(CharacterSystem characterSystem)
     {
@@ -62,15 +61,38 @@ public class SkillSystem : MonoBehaviour
 
     public IEnumerable<SkillData> GetNewSkillOffers()
     {
-        IEnumerable<SkillData> pool = weaponSkillPool.Concat(globalSkillPool);
-        return pool.Where(skill => skill != null && !HasSkill(skill)).Distinct();
+        for (int i = 0; i < weaponSkillPool.Count; i++)
+        {
+            SkillData skill = weaponSkillPool[i];
+
+            if (skill != null && !HasSkill(skill))
+            {
+                yield return skill;
+            }
+        }
+
+        for (int i = 0; i < globalSkillPool.Count; i++)
+        {
+            SkillData skill = globalSkillPool[i];
+
+            if (skill != null && !weaponSkillPool.Contains(skill) && !HasSkill(skill))
+            {
+                yield return skill;
+            }
+        }
     }
 
     public IEnumerable<SkillData> GetUpgradeableSkills()
     {
-        return activeSkills
-            .Where(skill => skill.Data != null && skill.Rank < skill.Data.MaxRank)
-            .Select(skill => skill.Data);
+        for (int i = 0; i < activeSkills.Count; i++)
+        {
+            SkillInstance skill = activeSkills[i];
+
+            if (skill.Data != null && skill.Rank < skill.Data.MaxRank)
+            {
+                yield return skill.Data;
+            }
+        }
     }
 
     public bool HasSkill(SkillData skillData)
@@ -133,10 +155,22 @@ public class SkillSystem : MonoBehaviour
 
     public SkillData GetReplacementCandidate()
     {
-        SkillInstance replaceableSkill = activeSkills
-            .Where(skill => !skill.Locked)
-            .OrderBy(skill => skill.Rank)
-            .FirstOrDefault();
+        SkillInstance replaceableSkill = null;
+
+        for (int i = 0; i < activeSkills.Count; i++)
+        {
+            SkillInstance skill = activeSkills[i];
+
+            if (skill.Locked)
+            {
+                continue;
+            }
+
+            if (replaceableSkill == null || skill.Rank < replaceableSkill.Rank)
+            {
+                replaceableSkill = skill;
+            }
+        }
 
         return replaceableSkill?.Data;
     }

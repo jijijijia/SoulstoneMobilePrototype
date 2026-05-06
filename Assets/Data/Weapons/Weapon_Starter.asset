@@ -15,6 +15,7 @@ MonoBehaviour:
   weaponId: starter_weapon
   displayName: Starter Weapon
   icon: {fileID: 0}
+  visualPrefab: {fileID: 64011676848679918, guid: 4dd4746b9430bb849a1eb0fcfc472d39, type: 3}
   startingSkill: {fileID: 11400000, guid: 00b0a94d3c1b70b4e8b11b6db4cc18b3, type: 2}
   uniqueSkillPool:
   - {fileID: 11400000, guid: 00b0a94d3c1b70b4e8b11b6db4cc18b3, type: 2}
@@ -27,4 +28,3 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 97491b0e9cc742b09e6ce7780b692d77, type: 2}
   - {fileID: 11400000, guid: d92be85d176241599e296a465014baea, type: 2}
   - {fileID: 11400000, guid: 540f2fb5e0884e22a6d7e6993c4818ef, type: 2}
-  weaponStatModifiers: []

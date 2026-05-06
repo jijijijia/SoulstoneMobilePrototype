@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   characterId: stormsentinel
   displayName: Storm Sentinel
-  modelPrefab: {fileID: 0}
+  modelPrefab: {fileID: 6415524911514085534, guid: fb93277be62b4b64e8cc924fa408482e, type: 3}
   baseStats:
   - statType: 0
     value: 90

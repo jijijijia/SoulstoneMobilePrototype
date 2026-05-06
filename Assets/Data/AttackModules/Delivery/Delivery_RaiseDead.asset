@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15457d7df54e461f9561fc8c2caa575a, type: 3}
+  m_Name: Delivery_RaiseDead
+  m_EditorClassIdentifier: Assembly-CSharp::SummonAttackDeliveryDefinition
+  summonCount: 5
+  maxActiveSummons: 10
+  summonDuration: 24
+  summonHealth: 120
+  summonLives: 2
+  summonMoveSpeed: 4.8
+  attackRange: 1.45
+  attackInterval: 0.65
+  spawnRadius: 2.1
+  enemyAggroRadius: 9

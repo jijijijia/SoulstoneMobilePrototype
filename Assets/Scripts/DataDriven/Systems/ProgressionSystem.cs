@@ -35,7 +35,7 @@ public class ProgressionSystem : MonoBehaviour
         upgradeSystem = ownerUpgradeSystem;
         choiceGenerator = progressionChoiceGenerator;
         ResetState();
-        currentLevel = Mathf.Max(1, startingLevel);
+        currentLevel = Mathf.Max(1, startingLevel + SkillTreeSystem.GetStartingLevelBonus());
         experienceToNextLevel = GetRequiredExperienceForLevel(currentLevel);
         ExperienceChanged?.Invoke(currentExperience, experienceToNextLevel);
         LevelChanged?.Invoke(currentLevel);
@@ -79,6 +79,21 @@ public class ProgressionSystem : MonoBehaviour
             LevelChanged?.Invoke(currentLevel);
             ExperienceChanged?.Invoke(currentExperience, experienceToNextLevel);
         }
+    }
+
+    public void ApplyAccountStartingLevelBonus(SkillTreeData tree = null)
+    {
+        int targetLevel = Mathf.Max(1, startingLevel + SkillTreeSystem.GetStartingLevelBonus(tree));
+
+        if (currentLevel >= targetLevel)
+        {
+            return;
+        }
+
+        currentLevel = targetLevel;
+        experienceToNextLevel = GetRequiredExperienceForLevel(currentLevel);
+        ExperienceChanged?.Invoke(currentExperience, experienceToNextLevel);
+        LevelChanged?.Invoke(currentLevel);
     }
 
     public List<ProgressionChoice> GenerateChoices()

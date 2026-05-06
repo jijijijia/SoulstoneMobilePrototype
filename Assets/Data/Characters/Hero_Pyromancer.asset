@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   characterId: pyromancer
   displayName: "\u041F\u0438\u0440\u043E\u043C\u0430\u043D\u0442"
-  modelPrefab: {fileID: 0}
+  modelPrefab: {fileID: 3296038182352337399, guid: 3304198c3cef5594d905de04295a1c2a, type: 3}
   baseStats:
   - statType: 0
     value: 82

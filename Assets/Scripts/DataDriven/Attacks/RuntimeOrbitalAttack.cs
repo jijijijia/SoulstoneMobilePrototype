@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RuntimeOrbitalAttack : MonoBehaviour
+public class RuntimeOrbitalAttack : MonoBehaviour, IPoolable
 {
     private readonly List<EnemyAgent> enemies = new();
     private readonly Dictionary<EnemyAgent, float> hitTimers = new();
@@ -22,6 +22,8 @@ public class RuntimeOrbitalAttack : MonoBehaviour
     public void Initialize(Transform ownerTransform, int count, float radius, float orbitalHitRadius, float activeDuration, float degreesPerSecond, float damageCooldown, int orbitalDamage, StatusEffectData[] orbitalStatuses, GameObject visualPrefab)
     {
         owner = ownerTransform;
+        ClearOrbitals();
+        hitTimers.Clear();
         orbitRadius = Mathf.Max(0.1f, radius);
         hitRadius = Mathf.Max(0.05f, orbitalHitRadius);
         duration = Mathf.Max(0.05f, activeDuration);
@@ -43,7 +45,7 @@ public class RuntimeOrbitalAttack : MonoBehaviour
     {
         if (owner == null)
         {
-            Destroy(gameObject);
+            PoolManager.Release(gameObject);
             return;
         }
 
@@ -63,7 +65,7 @@ public class RuntimeOrbitalAttack : MonoBehaviour
 
         if (timer >= duration)
         {
-            Destroy(gameObject);
+            PoolManager.Release(gameObject);
         }
     }
 
@@ -116,7 +118,7 @@ public class RuntimeOrbitalAttack : MonoBehaviour
 
         foreach (KeyValuePair<EnemyAgent, float> entry in hitTimers)
         {
-            if (entry.Key == null || entry.Value <= Time.deltaTime)
+            if (entry.Key == null)
             {
                 staleEnemies.Add(entry.Key);
             }
@@ -125,11 +127,6 @@ public class RuntimeOrbitalAttack : MonoBehaviour
         for (int i = 0; i < staleEnemies.Count; i++)
         {
             hitTimers.Remove(staleEnemies[i]);
-        }
-
-        for (int i = 0; i < staleEnemies.Count; i++)
-        {
-            // Reuse staleEnemies as a temporary list; dictionary values are updated in a second pass below.
         }
 
         List<EnemyAgent> keys = staleEnemies;
@@ -142,7 +139,61 @@ public class RuntimeOrbitalAttack : MonoBehaviour
 
         for (int i = 0; i < keys.Count; i++)
         {
-            hitTimers[keys[i]] -= Time.deltaTime;
+            EnemyAgent enemy = keys[i];
+            float remainingTime = hitTimers[enemy] - Time.deltaTime;
+
+            if (remainingTime <= 0f)
+            {
+                hitTimers.Remove(enemy);
+            }
+            else
+            {
+                hitTimers[enemy] = remainingTime;
+            }
         }
+    }
+
+    public void OnTakenFromPool()
+    {
+        timer = 0f;
+        angle = 0f;
+        hitTimers.Clear();
+        staleEnemies.Clear();
+    }
+
+    public void OnReturnedToPool()
+    {
+        owner = null;
+        statuses = null;
+        enemies.Clear();
+        hitTimers.Clear();
+        staleEnemies.Clear();
+        ClearOrbitals();
+        timer = 0f;
+        angle = 0f;
+    }
+
+    private void ClearOrbitals()
+    {
+        for (int i = orbitals.Count - 1; i >= 0; i--)
+        {
+            Transform orbital = orbitals[i];
+
+            if (orbital == null)
+            {
+                continue;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(orbital.gameObject);
+            }
+            else
+            {
+                DestroyImmediate(orbital.gameObject);
+            }
+        }
+
+        orbitals.Clear();
     }
 }

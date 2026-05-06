@@ -32,6 +32,8 @@ public class DataDrivenShockwaveSkill : SkillBehaviourBase
 
     private void FirePulse()
     {
+        PlayOwnerAttackVisual();
+
         int executionCount = Context.GetExecutionCount();
 
         for (int castIndex = 0; castIndex < executionCount; castIndex++)
@@ -66,6 +68,7 @@ public class DataDrivenShockwaveSkill : SkillBehaviourBase
         if (pulseVisual == null)
         {
             pulseVisual = visualObject.AddComponent<ShockwavePulseVisual>();
+            PoolManager.MarkPoolableCacheDirty(visualObject);
         }
 
         pulseVisual.Play(transform.position, pulseRadius, 0.18f);

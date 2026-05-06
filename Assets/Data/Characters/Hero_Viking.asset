@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Hero_Viking
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   characterId: viking
-  displayName: "\u0412\u0438\u043A\u0438\u043D\u0433"
-  modelPrefab: {fileID: 0}
+  displayName: "\u0421\u0438\u0433\u0443\u0440\u0434"
+  modelPrefab: {fileID: 2690207572220225819, guid: fbfcd876ad87c784db27d8a343bd0cb9, type: 3}
   baseStats:
   - statType: 0
     value: 145
@@ -34,21 +34,18 @@ MonoBehaviour:
     value: 0.01
   - statType: 23
     value: 0
-  startingWeapon: {fileID: 11400000, guid: faa00de40421ff641a65aee814d76a98, type: 2}
+  startingWeapon: {fileID: 11400000, guid: 0fe9a70b98884a60add51310959ab205, type: 2}
   availableWeapons:
+  - {fileID: 11400000, guid: 0fe9a70b98884a60add51310959ab205, type: 2}
+  - {fileID: 11400000, guid: 9030d79749b14780ab34e32b022d4f5c, type: 2}
   - {fileID: 11400000, guid: faa00de40421ff641a65aee814d76a98, type: 2}
   globalUpgradePool:
-  - {fileID: 11400000, guid: 0102f5617e9df374688e15b4afbc8b4e, type: 2}
-  - {fileID: 11400000, guid: e3ad1d6214e02924b98f94e956312826, type: 2}
-  - {fileID: 11400000, guid: 4ae58365f9cb4ba4f89d2e47569e4b71, type: 2}
-  - {fileID: 11400000, guid: 932f7cca3bb92dc4f82bfeabff8c19f4, type: 2}
-  - {fileID: 11400000, guid: ef461131015e1a54082d30d254339691, type: 2}
-  - {fileID: 11400000, guid: c60916d84bc1a544c8b598509cf4efcb, type: 2}
-  - {fileID: 11400000, guid: 6a8aa86d7fdfbcb438228bbbe200241a, type: 2}
-  - {fileID: 11400000, guid: df555676330fcb640a91967596ff711c, type: 2}
-  - {fileID: 11400000, guid: 927ad2132644b184b85b44f87e8a8b31, type: 2}
-  - {fileID: 11400000, guid: 68da39a34fbba8349b350d0d2cbd52be, type: 2}
+  - {fileID: 11400000, guid: e3cf652e55ca4a1dbe7db400dcb2eafb, type: 2}
   - {fileID: 11400000, guid: 528577d74b407b146bec561d763bdc7b, type: 2}
-  - {fileID: 11400000, guid: 43beab15c2e754b43a5c5089e7cfb5b7, type: 2}
-  - {fileID: 11400000, guid: cdbfdaa175d506d42bcae24585dc97f7, type: 2}
-  - {fileID: 11400000, guid: 8d44816ccc95bc34b89aebd8418c61ec, type: 2}
+  - {fileID: 11400000, guid: 0102f5617e9df374688e15b4afbc8b4e, type: 2}
+  - {fileID: 11400000, guid: aa1241ef5074476e9f93c63259d75c93, type: 2}
+  - {fileID: 11400000, guid: 097590a3b2d84b75a1ba91b844bd7e5f, type: 2}
+  - {fileID: 11400000, guid: 06d50997c3192794d8d19cb8f48bc74b, type: 2}
+  - {fileID: 11400000, guid: 27c6b1dcaefb8eb468bb95e9df433d9a, type: 2}
+  - {fileID: 11400000, guid: 6ba8299b00de4808b6fece12d616665c, type: 2}
+  - {fileID: 11400000, guid: 57222ac25ff547e8b3b92feab7e3b5a0, type: 2}

@@ -15,6 +15,7 @@ MonoBehaviour:
   weaponId: rune_hammer
   displayName: "\u0420\u0443\u043D\u043D\u044B\u0439 \u043C\u043E\u043B\u043E\u0442"
   icon: {fileID: 0}
+  visualPrefab: {fileID: 7051945278838216306, guid: 5514783232b7a8744bcce1d5ceed6472, type: 3}
   startingSkill: {fileID: 11400000, guid: dfdaaa307a202914385b16ef0006371d, type: 2}
   uniqueSkillPool:
   - {fileID: 11400000, guid: dfdaaa307a202914385b16ef0006371d, type: 2}

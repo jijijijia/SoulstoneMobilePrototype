@@ -115,9 +115,11 @@ public class SkillData : ScriptableObject
 #if UNITY_EDITOR
     private void OnValidate()
     {
-        if (runtimeDefinition == null)
+        bool hasAttackDefinitions = attackDefinitions != null && attackDefinitions.Length > 0;
+
+        if (runtimeDefinition == null && !hasAttackDefinitions)
         {
-            Debug.LogWarning($"Skill '{name}' does not have a Runtime Definition assigned.", this);
+            Debug.LogWarning($"Skill '{name}' does not have Runtime Definition or Attack Definitions assigned.", this);
         }
     }
 #endif

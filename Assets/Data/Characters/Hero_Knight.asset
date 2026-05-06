@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   characterId: knight
   displayName: "\u0420\u044B\u0446\u0430\u0440\u044C"
-  modelPrefab: {fileID: 0}
+  modelPrefab: {fileID: 3736018638904125548, guid: 1b4107ef54bcd814a9f76ed3fdf7df81, type: 3}
   baseStats:
   - statType: 0
     value: 175
